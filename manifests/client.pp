@@ -27,7 +27,7 @@ class role_sensu::client(
   @@sensu::check { "check_ping_of_${::fqdn}":
     command     => 'echo 0',
     handlers    => 'default',
-    subscribers => 'sensu-test'
+    subscribers => 'sensu-test',
     standalone  => true,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
