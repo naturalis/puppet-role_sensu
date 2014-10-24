@@ -97,9 +97,9 @@ class role_sensu::server(
   }
 
   uchiwa::api { 'Default Uchiwa API':
-    host     => $::ipaddress,
-    user     => '',
-    password => '',
+    host => $::ipaddress,
+    user => '',
+    pass => '',
   }
 
 }
