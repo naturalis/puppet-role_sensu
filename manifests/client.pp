@@ -15,6 +15,7 @@ class role_sensu::client(
     rabbitmq_password  => $rabbitmq_password,
     rabbitmq_host      => $sensu_server,
     subscriptions      => 'sensu-test',
+    server             => false,
   }
 
   sensu::check { 'check_cron':
