@@ -81,6 +81,8 @@ class role_sensu::server(
     command => 'mail -s \'sensu alert\' aut@naturalis.nl',
   }
 
-  class { 'uchiwa':}
+  class { 'uchiwa':
+    install_repo => false,
+  }
 
 }
