@@ -48,6 +48,25 @@ class role_sensu::server(
     fail('please change the sensu_cluser_name')
   }
 
+
+  class { 'redis': } ->
+
+  class { 'rabbitmq': } ->
+
+  rabbitmq_user { 'sensu':
+    password => '',
+  } ->
+
+  rabbitmq_vhost { 'sensu':
+    ensure => present,
+  } ->
+
+  rabbitmq_user_permissions { 'sensu@sensu':
+    configure_permission => '.*',
+    read_permission      => '.*',
+    write_permission     => '.*',
+  } ->
+
   class { 'sensu':
     rabbitmq_password => $rabbitmq_password,
     server            => true,
