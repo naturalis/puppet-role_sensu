@@ -54,8 +54,8 @@ class role_sensu::server(
   class { 'rabbitmq': } ->
 
   exec { 'added rabbitmq user Sensu since stupid puppet module doenst work':
-    command => '/usr/sbin/rabbitmqctl add_user sensu'
-    unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu'
+    command => '/usr/sbin/rabbitmqctl add_user sensu',
+    unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu',
   } ->
 
   # rabbitmq_user { 'sensu':
