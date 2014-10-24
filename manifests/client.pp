@@ -32,6 +32,8 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
+  Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
+
   $dbgmsg = "@@sensu::check { check_ping_of_${::fqdn}:
     command     => '/bin/echo 0',
     handlers    => 'default',
