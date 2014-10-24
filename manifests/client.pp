@@ -35,7 +35,7 @@ class role_sensu::client(
 
   # this is a registrated check
   @@sensu::check { "check_bing_of_${::fqdn}":
-    command     => 'return 2',
+    command     => 'return 0',
     handlers    => 'default',
     subscribers => 'sensu-test',
     standalone  => false,
