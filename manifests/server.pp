@@ -84,9 +84,7 @@ class role_sensu::server(
     api               => true,
   }
 
-  Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>> {
-    require => Class['sensu']
-  }
+  Sensu::check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
 
   sensu::handler { 'default':
     command => 'mail -s \'sensu alert\' aut@naturalis.nl',
