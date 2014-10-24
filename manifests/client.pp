@@ -31,8 +31,9 @@ class role_sensu::client(
     standalone  => true,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
+  realize(Sensu::Check["check_ping_of_${::fqdn}"])
 
-  Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
+  #Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
 
   $dbgmsg = "@@sensu::check { check_ping_of_${::fqdn}:
     command     => '/bin/echo 0',
