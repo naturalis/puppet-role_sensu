@@ -88,6 +88,8 @@ class role_sensu::server(
     api               => true,
   }
 
+  Notify <<| tag == 'blatest' |>>
+
   Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
 
   sensu::handler { 'default':

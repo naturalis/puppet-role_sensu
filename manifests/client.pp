@@ -43,7 +43,10 @@ class role_sensu::client(
     tag         => sensu_check_${sensu_cluster_name},
   }"
 
-  notify { 'DEBUG': message => $dbgmsg}
+  @@notify { 'DEBUG':
+    message => $dbgmsg,
+    tag     => 'blatest'
+  }
 
 
 }
