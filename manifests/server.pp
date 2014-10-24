@@ -53,12 +53,18 @@ class role_sensu::server(
 
   class { 'rabbitmq': } ->
 
-  rabbitmq_user { 'sensu':
-    password => '',
+  exec { 'added rabbitmq user Sensu since stupid puppet module doenst work':
+    command => '/usr/sbin/rabbitmqctl add_user sensu'
+    unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu'
   } ->
 
+  # rabbitmq_user { 'sensu':
+  #   password => '',
+  #   require  => Class['rabbitmq'],
+  # }
+
   rabbitmq_vhost { 'sensu':
-    ensure => present,
+    ensure  => present,
   } ->
 
   rabbitmq_user_permissions { 'sensu@sensu':
