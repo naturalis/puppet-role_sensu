@@ -51,15 +51,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
-  # published check
-  @@sensu::check { "check_bing_of_${::fqdn}":
-    command     => 'return 0',
-    handlers    => 'default',
-    subscribers => 'sensu-test',
-    standalone  => false,
-    tag         => "sensu_check_${sensu_cluster_name}",
 
-  }
 
 
 
