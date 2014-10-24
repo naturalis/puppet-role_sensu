@@ -85,4 +85,8 @@ class role_sensu::server(
     install_repo => false,
   }
 
+  uchiwa::api { 'Default Uchiwa API':
+    host    => $::ipaddress,
+  }
+
 }
