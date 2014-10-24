@@ -71,12 +71,16 @@ class role_sensu::server(
   # rabbitmq_vhost { 'sensu':
   #   ensure  => present,
   # } ->
-
-  rabbitmq_user_permissions { 'sensu@sensu':
-    configure_permission => '.*',
-    read_permission      => '.*',
-    write_permission     => '.*',
+  exec { 'added rabbitmq persmissions of sensu vhost since stupid puppet module doenst work':
+    command => '/usr/sbin/rabbitmqctl set_permissions -p sensu ".*" ".*" ".*"',
+    unless  => '/usr/sbin/rabbitmqctl list_permissions -p sensu | /bin/grep -v vhost | grep sensu',
   } ->
+
+  # rabbitmq_user_permissions { 'sensu@sensu':
+  #   configure_permission => '.*',
+  #   read_permission      => '.*',
+  #   write_permission     => '.*',
+  # } ->
 
   class { 'sensu':
     rabbitmq_password => '',
