@@ -24,6 +24,7 @@ class role_sensu::client(
     subscribers => 'sensu-test'
   }
 
+  # this is not a registrated check
   @@sensu::check { "check_ping_of_${::fqdn}":
     command     => '/bin/echo 0',
     handlers    => 'default',
@@ -31,21 +32,14 @@ class role_sensu::client(
     standalone  => true,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  realize(Sensu::Check["check_ping_of_${::fqdn}"])
 
-  #Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
-
-  $dbgmsg = "@@sensu::check { check_ping_of_${::fqdn}:
-    command     => '/bin/echo 0',
+  # this is a registrated check
+  @@sensu::check { "check_bing_of_${::fqdn}":
+    command     => 'return 2',
     handlers    => 'default',
     subscribers => 'sensu-test',
-    standalone  => true,
-    tag         => sensu_check_${sensu_cluster_name},
-  }"
-
-  @@notify { 'DEBUG':
-    message => $dbgmsg,
-    tag     => 'blatest'
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
   }
 
 
