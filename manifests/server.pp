@@ -79,7 +79,7 @@ class role_sensu::server(
   } ->
 
   class { 'sensu':
-    rabbitmq_password => $rabbitmq_password,
+    rabbitmq_password => '',
     server            => true,
     api               => true,
   }
