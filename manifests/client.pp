@@ -24,6 +24,14 @@ class role_sensu::client(
     subscribers => 'sensu-test'
   }
 
+  # this is a registrated check
+  sensu::check { 'check_puppet_service':
+    command     => '/bin/ps -aux | grep -v grep | grep puppet',
+    handlers    => 'default',
+    subscribers => 'sensu-test',
+    standalone  => false,
+  }
+
   # this is not a registrated check
   @@sensu::check { "check_ping_of_${::fqdn}":
     command     => '/bin/echo 0',
