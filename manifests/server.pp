@@ -91,9 +91,9 @@ class role_sensu::server(
 
   Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
 
-  sensu::handler { 'default':
-    command => 'mail -s \'sensu alert\' aut@naturalis.nl',
-  }
+  # sensu::handler { 'default':
+  #   command => 'mail -s \'sensu alert\' aut@naturalis.nl',
+  # }
 
   class { 'uchiwa':
     install_repo => false,
@@ -113,6 +113,9 @@ class role_sensu::server(
     source   => 'git://github.com/sensu/sensu-community-plugins',
     require  => Package['git'],
   }
+
+  # needs package ruby-dev
+  # needs gem install mail sensu-plugin
 
   sensu::handler {'mail_aut':
     command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
