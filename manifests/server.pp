@@ -86,7 +86,7 @@ class role_sensu::server(
     rabbitmq_password => '',
     server            => true,
     api               => true,
-    use_embedded_ruby => true,
+    use_embedded_ruby => false,
   }
 
   Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
