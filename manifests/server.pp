@@ -113,6 +113,20 @@ class role_sensu::server(
     require  => Package['git'],
   }
 
+  sensu::handler {'mail_aut':
+    command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
+    config  => {
+      'mailer' => {
+        'admin_gui'    => 'http://10.41.3.22:3000/',
+        'mail_from'    => 'sensu@naturalis.nl',
+        'mail_to'      => 'aut@naturalis.nl',
+        'smtp_address' => 'aspmx.l.google.com',
+        'smtp_port'    => '25',
+        'smtp_domain'  => 'naturalis.nl'
+      }
+    }
+  }
+
 
 
 
