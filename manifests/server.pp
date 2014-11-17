@@ -119,14 +119,14 @@ class role_sensu::server(
 
   sensu::handler {'mail_aut':
     command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
-    config  => {
-        'admin_gui'    => 'http://10.41.3.22:3000/',
-        'mail_from'    => 'sensu@naturalis.nl',
-        'mail_to'      => 'aut@naturalis.nl',
-        'smtp_address' => 'localhost',
-        'smtp_port'    => '25',
-        'smtp_domain'  => 'naturalis.nl'
-    }
+    # config  => {
+    #     'admin_gui'    => 'http://10.41.3.22:3000/',
+    #     'mail_from'    => 'sensu@naturalis.nl',
+    #     'mail_to'      => 'aut@naturalis.nl',
+    #     'smtp_address' => 'localhost',
+    #     'smtp_port'    => '25',
+    #     'smtp_domain'  => 'naturalis.nl'
+    # }
   }
 
 
