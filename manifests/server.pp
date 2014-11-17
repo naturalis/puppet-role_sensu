@@ -104,4 +104,14 @@ class role_sensu::server(
     pass => '',
   }
 
+  vcsrepo { '/opt/sensu-community-plugins':
+    ensure   => present,
+    provider => git,
+    source   => 'git://github.com/sensu/sensu-community-plugins',
+  }
+
+  
+
+
+
 }

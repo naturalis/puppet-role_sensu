@@ -12,10 +12,10 @@ class role_sensu::client(
   if $sensu_cluster_name == 'changeme' { fail('please change the sensu_cluser_name') }
 
   class { 'sensu':
-    rabbitmq_password  => $rabbitmq_password,
-    rabbitmq_host      => $sensu_server,
-    subscriptions      => 'sensu-test',
-    server             => false,
+    rabbitmq_password => $rabbitmq_password,
+    rabbitmq_host     => $sensu_server,
+    subscriptions     => 'sensu-test',
+    server            => false,
   }
 
   sensu::check { 'check_cron':
