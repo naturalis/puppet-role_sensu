@@ -89,6 +89,7 @@ class role_sensu::server(
     server            => true,
     api               => true,
     use_embedded_ruby => true,
+    subscriptions     => ['sensu-test','sensu-server'],
   }
 
   Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
