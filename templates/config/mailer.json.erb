@@ -1,0 +1,20 @@
+<%
+mails = @notification_addresses.join(',')
+-%>
+{
+    "mailer": {
+      "admin_gui": "http://<%= @uchiwa_ip %>:3000/",
+      "mail_from": "sensu@naturalis.nl",
+      "mail_to": "<%= mails %>",
+      "smtp_address": "aspmx.l.google.com",
+      "smtp_port": "25",
+      "smtp_domain": "naturalis.nl",
+      "type": "pipe",
+      "severities": [
+        "ok",
+        "warning",
+        "critical",
+        "unknown"
+      ]
+    }
+}

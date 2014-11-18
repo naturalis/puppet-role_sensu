@@ -36,8 +36,10 @@
 # Copyright 2014 Naturalis
 #
 class role_sensu::server(
-  $rabbitmq_password  = 'changeme',
-  $sensu_cluster_name = 'changeme',
+  $rabbitmq_password      = 'changeme',
+  $sensu_cluster_name     = 'changeme',
+  $notification_addresses = ['aut@naturalis.nl'],
+  $uchiwa_ip              = '10.41.3.22'
 ){
 
   if $rabbitmq_password == 'changeme' {
@@ -117,17 +119,17 @@ class role_sensu::server(
   # needs package ruby-dev
   # needs gem install mail sensu-plugin
 
-  sensu::handler {'mail_aut':
+  sensu::handler {'default':
     command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
-    # config  => {
-    #     'admin_gui'    => 'http://10.41.3.22:3000/',
-    #     'mail_from'    => 'sensu@naturalis.nl',
-    #     'mail_to'      => 'aut@naturalis.nl',
-    #     'smtp_address' => 'localhost',
-    #     'smtp_port'    => '25',
-    #     'smtp_domain'  => 'naturalis.nl'
-    # }
   }
+
+  file {'/etc/sensu/conf.d/mailer.json':
+    ensure  => present,
+    content => template('sensu/config/mailer.json.erb'),
+    notice  => Service['sensu-server'],
+  }
+
+
 
 
 
