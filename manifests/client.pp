@@ -42,6 +42,30 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
+  @@sensu::check { 'check_www_walvisstrandingen_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.walvisstrandingen.nl -q \'Alle geregistreerde Nederlandse walvisstrandingen\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
+  @@sensu::check { 'check_www_soortenbank_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.soortenbank.nl -q \'Zoek naar de soort:\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
+  @@sensu::check { 'check_www_nederlandsesoorten_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nederlandsesoorten.nl -q \'Home\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
 
 
 
