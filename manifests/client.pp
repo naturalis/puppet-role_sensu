@@ -34,22 +34,14 @@ class role_sensu::client(
   }
 
   # this is not a registrated check
-  @@sensu::check { "check_ping_of_${::fqdn}":
-    command     => '/bin/echo 0',
+  @@sensu::check { 'check_www_catalogue_of_life_org':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org -q \'Welcome to the Catalogue of Life website\'',
     handlers    => 'default',
     subscribers => 'sensu-test',
     standalone  => true,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
-  # this is a registrated check
-  @@sensu::check { "check_bing_of_${::fqdn}":
-    command     => 'return 0',
-    handlers    => 'default',
-    subscribers => 'sensu-test',
-    standalone  => false,
-    tag         => "sensu_check_${sensu_cluster_name}",
-  }
 
 
 
