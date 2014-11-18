@@ -125,7 +125,7 @@ class role_sensu::server(
 
   file {'/etc/sensu/conf.d/mailer.json':
     ensure  => present,
-    content => template('sensu/config/mailer.json.erb'),
+    content => template('role_sensu/config/mailer.json.erb'),
     notice  => Service['sensu-server'],
   }
 
