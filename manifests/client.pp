@@ -37,7 +37,7 @@ class role_sensu::client(
   @@sensu::check { 'check_www_catalogue_of_life_org':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org -q \'Welcome to the Catalogue of Life website\'',
     handlers    => 'default',
-    subscribers => 'sensu-test',
+    subscribers => 'sensu-server',
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
