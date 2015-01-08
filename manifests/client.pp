@@ -83,11 +83,18 @@ class role_sensu::client(
   }
   
   @@sensu::check { 'check_www_catalogueoflife_org':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://http://www.catalogueoflife.org/ -q \'Welcome to the Catalogue of Life website\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/ -q \'Welcome to the Catalogue of Life website\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
+  @@sensu::check { 'check_bioportal.naturalis.nl/':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
 }
