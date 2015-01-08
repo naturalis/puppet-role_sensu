@@ -154,4 +154,12 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
+  @@sensu::check { 'check_tientjevoortrex_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://tientjevoortrex.naturalis.nl/nl/ -q \'De opgraving\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
 }
