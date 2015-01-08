@@ -130,16 +130,24 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_iawa-website_org/':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://http://iawa-website.org/ -q \'IAWA: The International Association\'',
+  @@sensu::check { 'check_iawa-website_org':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://iawa-website.org/ -q \'IAWA: The International Association\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_seedlists_naturalis_nl/':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://http://iawa-website.org/ -q \'Seed lists\'',
+  @@sensu::check { 'check_seedlists_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://iawa-website.org/ -q \'Seed lists\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+ 
+  @@sensu::check { 'check_www_sp2000_org':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.sp2000.org/ -q \'Welcome to the Species 2000 website\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
