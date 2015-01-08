@@ -177,4 +177,13 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
+  
+  @@sensu::check { 'check_trex_verbinduwnaam_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://trex-verbinduwnaam.naturalis.nl/ -q \'Verbind uw naam aan T. rex\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
 }
