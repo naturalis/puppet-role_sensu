@@ -139,7 +139,7 @@ class role_sensu::client(
   }
   
   @@sensu::check { 'check_seedlists_naturalis_nl':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://iawa-website.org/ -q \'Seed lists\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://seedlists.naturalis.nl/ -q \'Seed lists\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
