@@ -74,4 +74,20 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
+  @@sensu::check { 'check_3d_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://3d.naturalis.nl/nl/ -q \'biodiversity in cyberspace\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
+  @@sensu::check { 'check_www_catalogueoflife_org':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://http://www.catalogueoflife.org/ -q \'Welcome to the Catalogue of Life website\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
 }
