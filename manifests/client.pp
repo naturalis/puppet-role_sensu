@@ -98,7 +98,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_nationaalherbarium_nl/':
+  @@sensu::check { 'check_www_nationaalherbarium_nl/invasieven':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/invasieven/ -q \'Table of Contents\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
