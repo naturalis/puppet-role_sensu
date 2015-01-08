@@ -82,7 +82,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_bioportal.naturalis.nl/':
+  @@sensu::check { 'check_bioportal_naturalis_nl/':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
