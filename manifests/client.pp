@@ -170,4 +170,11 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
+  @@sensu::check { 'check_doneren_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://doneren.naturalis.nl/Form -q \'Doneren\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
 }
