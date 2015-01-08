@@ -75,7 +75,7 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_3d_naturalis_nl':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://3d.naturalis.nl/nl/ -q \'biodiversity in cyberspace\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://3d.naturalis.nl/ -q \'biodiversity in cyberspace\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
@@ -156,6 +156,14 @@ class role_sensu::client(
   
   @@sensu::check { 'check_tientjevoortrex_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://tientjevoortrex.naturalis.nl/nl/ -q \'De opgraving\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
+  @@sensu::check { 'check_science_naturalis_nl':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://science.naturalis.nl/en/ -q \'Museum\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
