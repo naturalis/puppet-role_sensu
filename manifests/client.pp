@@ -82,7 +82,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_bioportal_naturalis_nl/':
+  @@sensu::check { 'check_bioportal_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -90,7 +90,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_nationaalherbarium_nl/invasieven':
+  @@sensu::check { 'check_www_nationaalherbarium_nl_invasieven':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/invasieven/ -q \'Table of Contents\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -98,7 +98,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_nationaalherbarium_nl/FMCollectors':
+  @@sensu::check { 'check_www_nationaalherbarium_nl_FMCollectors':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/FMCollectors/ -q \'Cyclopaedia of\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -106,7 +106,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
  
- @@sensu::check { 'check_www_nationaalherbarium_nl/Euphorbs':
+ @@sensu::check { 'check_www_nationaalherbarium_nl_Euphorbs':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/Euphorbs/ -q \'Euphorbiaceae\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -114,7 +114,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_nationaalherbarium_nl/ThaiEuph':
+  @@sensu::check { 'check_www_nationaalherbarium_nl_ThaiEuph':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/ThaiEuph/ -q \'Flora of Thailand\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -130,7 +130,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_iawa-website_org':
+  @@sensu::check { 'check_iawa_website_org':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://iawa-website.org/ -q \'IAWA: The International Association\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
