@@ -107,7 +107,7 @@ class role_sensu::client(
   }
   
   @@sensu::check { 'check_www_nationaalherbarium_nl/FMCollectors/':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/FMCollectors/ -q \'Cyclopaedia of Malesian Collectors\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/FMCollectors/ -q \'Cyclopaedia of\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
