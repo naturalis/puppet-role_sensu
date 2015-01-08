@@ -82,14 +82,6 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_catalogueoflife_org':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/ -q \'Welcome to the Catalogue of Life website\'',
-    handlers    => 'default',
-    subscribers => 'sensu-server',
-    standalone  => false,
-    tag         => "sensu_check_${sensu_cluster_name}",
-  }
-  
   @@sensu::check { 'check_bioportal.naturalis.nl/':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
     handlers    => 'default',
@@ -106,7 +98,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
   
-  @@sensu::check { 'check_www_nationaalherbarium_nl/FMCollectors/':
+  @@sensu::check { 'check_www_nationaalherbarium_nl/FMCollectors':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/FMCollectors/ -q \'Cyclopaedia of\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -114,8 +106,16 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
  
- @@sensu::check { 'check_www_nationaalherbarium_nl/Euphorbs/':
+ @@sensu::check { 'check_www_nationaalherbarium_nl/Euphorbs':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/Euphorbs/ -q \'Euphorbiaceae\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
+  @@sensu::check { 'check_www_nationaalherbarium_nl/ThaiEuph':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/ThaiEuph/ -q \'Flora of Thailand\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
