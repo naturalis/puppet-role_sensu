@@ -67,7 +67,7 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_www_naturalis_nl':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.naturalis.nl/nl/nl/ -q \'Bezoekersinfo\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.naturalis.nl/nl/ -q \'Bezoekersinfo\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
