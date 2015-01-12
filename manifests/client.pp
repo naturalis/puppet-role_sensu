@@ -183,6 +183,7 @@ class role_sensu::client(
     interval    => 60,
     occurrences => 3,
     refresh     => 15,
+    timeout     => 600,
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://10.42.1.193 -q \'works\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
