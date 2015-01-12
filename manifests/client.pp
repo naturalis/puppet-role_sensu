@@ -81,7 +81,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_bioportal_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
     handlers    => 'default',
@@ -89,7 +89,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_www_nationaalherbarium_nl_invasieven':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/invasieven/ -q \'Table of Contents\'',
     handlers    => 'default',
@@ -97,7 +97,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_www_nationaalherbarium_nl_FMCollectors':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/FMCollectors/ -q \'Cyclopaedia of\'',
     handlers    => 'default',
@@ -105,7 +105,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
- 
+
  @@sensu::check { 'check_www_nationaalherbarium_nl_Euphorbs':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/Euphorbs/ -q \'Euphorbiaceae\'',
     handlers    => 'default',
@@ -113,7 +113,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_www_nationaalherbarium_nl_ThaiEuph':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/ThaiEuph/ -q \'Flora of Thailand\'',
     handlers    => 'default',
@@ -121,7 +121,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   #@@sensu::check { 'check_www_dierenzoeker_nl':
   #  command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.dierenzoeker.nl/ -q \'Dierenzoeker\'',
   #  handlers    => 'default',
@@ -129,7 +129,7 @@ class role_sensu::client(
   #  standalone  => false,
   #  tag         => "sensu_check_${sensu_cluster_name}",
   #}
-  
+
   @@sensu::check { 'check_iawa_website_org':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://iawa-website.org/ -q \'IAWA: The International Association\'',
     handlers    => 'default',
@@ -137,7 +137,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_seedlists_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://seedlists.naturalis.nl/ -q \'Seed lists\'',
     handlers    => 'default',
@@ -145,7 +145,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
- 
+
   @@sensu::check { 'check_www_sp2000_org':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.sp2000.org/ -q \'Welcome to the Species 2000 website\'',
     handlers    => 'default',
@@ -153,7 +153,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_tientjevoortrex_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://tientjevoortrex.naturalis.nl/nl/ -q \'De opgraving\'',
     handlers    => 'default',
@@ -161,7 +161,7 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_science_naturalis_nl':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://science.naturalis.nl/en/ -q \'Museum\'',
     handlers    => 'default',
@@ -177,7 +177,16 @@ class role_sensu::client(
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
+  @@sensu::check { 'check_test_10_42_1_193':
+    ensure      => present,
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://10.42.1.193 -q \'works\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
   #@@sensu::check { 'check_trex_verbinduwnaam_naturalis_nl':
   #  command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://trex-verbinduwnaam.naturalis.nl/ -q \'Verbind uw naam aan T. rex\'',
   #  handlers    => 'default',
@@ -185,5 +194,5 @@ class role_sensu::client(
   #  standalone  => false,
   #  tag         => "sensu_check_${sensu_cluster_name}",
   #}
-  
+
 }
