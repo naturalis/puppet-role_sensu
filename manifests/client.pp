@@ -106,7 +106,7 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
- @@sensu::check { 'check_www_nationaalherbarium_nl_Euphorbs':
+  @@sensu::check { 'check_www_nationaalherbarium_nl_Euphorbs':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.nationaalherbarium.nl/Euphorbs/ -q \'Euphorbiaceae\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
@@ -178,18 +178,6 @@ class role_sensu::client(
     tag         => "sensu_check_${sensu_cluster_name}",
   }
 
-  @@sensu::check { 'check_test_10_42_1_193':
-    ensure      => present,
-    interval    => 60,
-    occurrences => 3,
-    refresh     => 15,
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://10.42.1.193 -q \'works\'',
-    handlers    => 'default',
-    subscribers => 'sensu-server',
-    standalone  => false,
-    aggregate   => true,
-    tag         => "sensu_check_${sensu_cluster_name}",
-  }
 
   #@@sensu::check { 'check_trex_verbinduwnaam_naturalis_nl':
   #  command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://trex-verbinduwnaam.naturalis.nl/ -q \'Verbind uw naam aan T. rex\'',
