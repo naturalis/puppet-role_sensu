@@ -147,7 +147,7 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_www_sp2000_org':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.sp2000.org/ -q \'Welcome to the Species 2000 website\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.sp2000.org/ -q \'Home | Species 2000\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
