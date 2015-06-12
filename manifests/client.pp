@@ -83,7 +83,7 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_bioportal_naturalis_nl':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'Browse through Dutch natural history collections\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://bioportal.naturalis.nl/ -q \'BioPortal\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
