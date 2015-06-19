@@ -34,8 +34,32 @@ class role_sensu::client(
   }
 
   # this is not a registrated check
-  @@sensu::check { 'check_www_catalogue_of_life_org':
+  @@sensu::check { 'check_www_catalogue_of_life_org_website':
     command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org -q \'Welcome to the Catalogue of Life website\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
+  @@sensu::check { 'check_www_catalogue_of_life_org_dynamic_checklist':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/col -q \'###Catalogue of Life\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+  
+  @@sensu::check { 'check_www_catalogue_of_life_org_annual_checklist':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/annual-checklist -q \'###Catalogue of Life\'',
+    handlers    => 'default',
+    subscribers => 'sensu-server',
+    standalone  => false,
+    tag         => "sensu_check_${sensu_cluster_name}",
+  }
+
+  @@sensu::check { 'check_www_catalogue_of_life_org_workbench':
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://134.213.57.57:10000 -q \'###Catalogue of Life Workbench\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
