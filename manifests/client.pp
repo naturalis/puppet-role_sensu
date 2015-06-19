@@ -43,15 +43,15 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_www_catalogue_of_life_org_dynamic_checklist':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/col -q \'Catalogue of Life\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/col/ -q \'Catalogue of Life\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
     tag         => "sensu_check_${sensu_cluster_name}",
   }
-  
+
   @@sensu::check { 'check_www_catalogue_of_life_org_annual_checklist':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/annual-checklist/2015 -q \'Catalogue of Life\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/annual-checklist/2015/ -q \'Catalogue of Life\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
