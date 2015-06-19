@@ -51,7 +51,7 @@ class role_sensu::client(
   }
   
   @@sensu::check { 'check_www_catalogue_of_life_org_annual_checklist':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/annual-checklist -q \'Catalogue of Life\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url http://www.catalogueoflife.org/annual-checklist/2015 -q \'Catalogue of Life\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
@@ -59,7 +59,7 @@ class role_sensu::client(
   }
 
   @@sensu::check { 'check_www_catalogue_of_life_org_workbench':
-    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb --url https://134.213.57.57:10000 -q \'Catalogue of Life Workbench\'',
+    command     => '/opt/sensu-community-plugins/plugins/http/check-http.rb -k --url https://134.213.57.57:10000 -q \'Catalogue of Life Workbench\'',
     handlers    => 'default',
     subscribers => 'sensu-server',
     standalone  => false,
