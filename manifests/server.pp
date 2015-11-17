@@ -55,7 +55,7 @@ class role_sensu::server(
     cert    => $client_cert,
   } ->
 
-  role_sensu::rabbitmq { 'rmq sever ':
+  role_sensu::rabbitmq { 'sensu_rmq_sever':
     password => $rabbitmq_password
   } ->
 
