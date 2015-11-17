@@ -46,6 +46,19 @@ class role_sensu::server(
   $api_password      = 'bladiebla'
 ){
 
+
+  $uchiwa_api_config = [
+    { name     => 'Naturalis Sensu',
+      host     => 'localhost',
+      ssl      => false,
+      insecure => false,
+      port     => 4567,
+      user     => $api_user,
+      pass     => $api_password,
+      timeout  => 5
+      }
+    ]
+
   role_sensu::keys::server { 'server_keys' :
     private => $server_key,
     cert    => $server_cert,
@@ -77,18 +90,6 @@ class role_sensu::server(
     use_embedded_ruby        => true,
   } ->
 
-
-  $uchiwa_api_config = [
-    { name     => 'Naturalis Sensu'
-      host     => 'localhost',
-      ssl      => false,
-      insecure => false,
-      port     => 4567,
-      user     => $api_user,
-      pass     => $api_password,
-      timeout  => 5
-      }
-    ]
 
   class { 'uchiwa':
     sensu_api_endpoints => $uchiwa_api_config,
