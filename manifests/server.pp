@@ -36,100 +36,128 @@
 # Copyright 2014 Naturalis
 #
 class role_sensu::server(
-  $rabbitmq_password      = 'changeme',
-  $sensu_cluster_name     = 'changeme',
-  $notification_addresses = ['aut@naturalis.nl'],
-  $uchiwa_ip              = '10.41.3.22'
+  $server_key,
+  $server_cert,
+  $cacert,
+  $client_cert,
+  $client_key,
+  $rabbitmq_password = 'bladiebla',
 ){
 
-  if $rabbitmq_password == 'changeme' {
-    fail('please change the rabbitmq_password')
-  }
+  role_sensu::keys::server { 'server_keys' :
+    private => $server_key,
+    cert    => $server_cert,
+    cacert  => $cacert
+  } ->
 
-  if $sensu_cluster_name == 'changeme' {
-    fail('please change the sensu_cluser_name')
-  }
+  role_sensu::keys::client { 'client_keys' :
+    private => $server_key,
+    cert    => $server_cert,
+  } ->
 
+  role_sensu::rabbitmq { 'rmq sever ':
+    password => $rabbitmq_password
+  } ->
 
   class { 'redis': } ->
 
-  class { 'rabbitmq': } ->
-
-  exec { 'added rabbitmq user Sensu since stupid puppet module doenst work':
-    command => '/usr/sbin/rabbitmqctl add_user sensu',
-    unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu',
-  } ->
-
-  exec { 'added rabbitmq vhost Sensu since stupid puppet module doenst work':
-    command => '/usr/sbin/rabbitmqctl add_vhost sensu',
-    unless  => '/usr/sbin/rabbitmqctl list_vhosts | /bin/grep sensu',
-  } ->
-
-  # rabbitmq_user { 'sensu':
-  #   password => '',
-  #   require  => Class['rabbitmq'],
-  # }
-
-  # rabbitmq_vhost { 'sensu':
-  #   ensure  => present,
-  # } ->
-  exec { 'added rabbitmq persmissions of sensu vhost since stupid puppet module doenst work':
-    command => '/usr/sbin/rabbitmqctl set_permissions -p sensu ".*" ".*" ".*"',
-    unless  => '/usr/sbin/rabbitmqctl list_permissions -p sensu | /bin/grep -v vhost | grep sensu',
-  } ->
-
-  # rabbitmq_user_permissions { 'sensu@sensu':
-  #   configure_permission => '.*',
-  #   read_permission      => '.*',
-  #   write_permission     => '.*',
-  # } ->
-
   class { 'sensu':
-    rabbitmq_password => '',
-    server            => true,
-    api               => true,
-    use_embedded_ruby => true,
-    subscriptions     => ['sensu-test','sensu-server'],
+    server                   => true,
+    purge_config             => true,
+    rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
+    rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
+    rabbitmq_host            => 'localhost',
+    subscriptions            => 'sensu-test',
   }
 
-  Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
-
-  # sensu::handler { 'default':
-  #   command => 'mail -s \'sensu alert\' aut@naturalis.nl',
+  # if $rabbitmq_password == 'changeme' {
+  #   fail('please change the rabbitmq_password')
   # }
+  #
+  # if $sensu_cluster_name == 'changeme' {
+  #   fail('please change the sensu_cluser_name')
+  # }
+  #
 
-  class { 'uchiwa':
-    install_repo => false,
-  }
-
-  uchiwa::api { 'Default Uchiwa API':
-    host => $::ipaddress,
-    user => '',
-    pass => '',
-  }
-
-  package {'git': }
-
-  vcsrepo { '/opt/sensu-community-plugins':
-    ensure   => present,
-    provider => git,
-    source   => 'git://github.com/sensu/sensu-community-plugins',
-    require  => Package['git'],
-  }
-
-  # needs package ruby-dev
-  # needs gem install mail sensu-plugin
-
-  sensu::handler {'default':
-    command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
-  }
-
-  file {'/etc/sensu/conf.d/mailer.json':
-    ensure  => present,
-    content => template('role_sensu/config/mailer.json.erb'),
-    notify  => Service['sensu-server'],
-  }
-
+  # class { 'redis': } ->
+  #
+  # class { 'rabbitmq': } ->
+  #
+  # exec { 'added rabbitmq user Sensu since stupid puppet module doenst work':
+  #   command => '/usr/sbin/rabbitmqctl add_user sensu',
+  #   unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu',
+  # } ->
+  #
+  # exec { 'added rabbitmq vhost Sensu since stupid puppet module doenst work':
+  #   command => '/usr/sbin/rabbitmqctl add_vhost sensu',
+  #   unless  => '/usr/sbin/rabbitmqctl list_vhosts | /bin/grep sensu',
+  # } ->
+  #
+  # # rabbitmq_user { 'sensu':
+  # #   password => '',
+  # #   require  => Class['rabbitmq'],
+  # # }
+  #
+  # # rabbitmq_vhost { 'sensu':
+  # #   ensure  => present,
+  # # } ->
+  # exec { 'added rabbitmq persmissions of sensu vhost since stupid puppet module doenst work':
+  #   command => '/usr/sbin/rabbitmqctl set_permissions -p sensu ".*" ".*" ".*"',
+  #   unless  => '/usr/sbin/rabbitmqctl list_permissions -p sensu | /bin/grep -v vhost | grep sensu',
+  # } ->
+  #
+  # # rabbitmq_user_permissions { 'sensu@sensu':
+  # #   configure_permission => '.*',
+  # #   read_permission      => '.*',
+  # #   write_permission     => '.*',
+  # # } ->
+  #
+  # class { 'sensu':
+  #   rabbitmq_password => '',
+  #   server            => true,
+  #   api               => true,
+  #   use_embedded_ruby => true,
+  #   subscriptions     => ['sensu-test','sensu-server'],
+  # }
+  #
+  # Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
+  #
+  # # sensu::handler { 'default':
+  # #   command => 'mail -s \'sensu alert\' aut@naturalis.nl',
+  # # }
+  #
+  # class { 'uchiwa':
+  #   install_repo => false,
+  # }
+  #
+  # uchiwa::api { 'Default Uchiwa API':
+  #   host => $::ipaddress,
+  #   user => '',
+  #   pass => '',
+  # }
+  #
+  # package {'git': }
+  #
+  # vcsrepo { '/opt/sensu-community-plugins':
+  #   ensure   => present,
+  #   provider => git,
+  #   source   => 'git://github.com/sensu/sensu-community-plugins',
+  #   require  => Package['git'],
+  # }
+  #
+  # # needs package ruby-dev
+  # # needs gem install mail sensu-plugin
+  #
+  # sensu::handler {'default':
+  #   command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
+  # }
+  #
+  # file {'/etc/sensu/conf.d/mailer.json':
+  #   ensure  => present,
+  #   content => template('role_sensu/config/mailer.json.erb'),
+  #   notify  => Service['sensu-server'],
+  # }
+  #
 
 
 
