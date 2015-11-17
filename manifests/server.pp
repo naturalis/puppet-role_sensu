@@ -42,6 +42,8 @@ class role_sensu::server(
   $client_cert,
   $client_key,
   $rabbitmq_password = 'bladiebla',
+  $api_user          = 'sensu_api',
+  $api_password      = 'bladiebla'
 ){
 
   role_sensu::keys::server { 'server_keys' :
@@ -69,8 +71,33 @@ class role_sensu::server(
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => 'localhost',
     subscriptions            => 'sensu-test',
+    api                      => true,
+    api_user                 => $api_user,
+    api_password             => $api_password,
     use_embedded_ruby        => true,
+  } ->
+
+
+  $uchiwa_api_config = [
+    { name     => 'Naturalis Sensu'
+      host     => 'localhost',
+      ssl      => false,
+      insecure => false,
+      port     => 4567,
+      user     => $api_user,
+      pass     => $api_password,
+      timeout  => 5
+      }
+    ]
+
+  class { 'uchiwa':
+    sensu_api_endpoints => $uchiwa_api_config,
+    user                => $api_user,
+    pass                => $api_password,
+    install_repo        => false            # otherwise you get this: Apt::Source[sensu] is already declared in file /etc/puppet/modules/sensu/manifests/repo/apt.pp
   }
+
+
 
   # if $rabbitmq_password == 'changeme' {
   #   fail('please change the rabbitmq_password')
