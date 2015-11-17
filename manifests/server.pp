@@ -56,7 +56,7 @@ class role_sensu::server(
   } ->
 
   role_sensu::rabbitmq { 'sensu_rmq_sever':
-    password => $rabbitmq_password
+    sensu_password => $rabbitmq_password
   } ->
 
   class { 'redis': } ->
