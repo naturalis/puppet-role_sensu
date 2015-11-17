@@ -88,6 +88,7 @@ class role_sensu::server(
     api_user                 => $api_user,
     api_password             => $api_password,
     use_embedded_ruby        => true,
+    rabbitmq_port            => 5671,
   } ->
 
 
