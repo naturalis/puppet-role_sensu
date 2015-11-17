@@ -20,5 +20,6 @@ class role_sensu::client(
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => $sensu_server,
     subscriptions            => 'sensu-test',
+    use_embedded_ruby        => true,
   }
 }
