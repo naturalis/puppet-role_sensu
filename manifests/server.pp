@@ -69,6 +69,7 @@ class role_sensu::server(
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => 'localhost',
     subscriptions            => 'sensu-test',
+    use_embedded_ruby        => true,
   }
 
   # if $rabbitmq_password == 'changeme' {
