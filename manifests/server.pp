@@ -51,8 +51,8 @@ class role_sensu::server(
   } ->
 
   role_sensu::keys::client { 'client_keys' :
-    private => $server_key,
-    cert    => $server_cert,
+    private => $client_key,
+    cert    => $client_cert,
   } ->
 
   role_sensu::rabbitmq { 'rmq sever ':
@@ -64,6 +64,7 @@ class role_sensu::server(
   class { 'sensu':
     server                   => true,
     purge_config             => true,
+    rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => 'localhost',
