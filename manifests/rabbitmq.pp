@@ -5,7 +5,7 @@ define role_sensu::rabbitmq (
   $sensu_password,
   $public_keyname = '/etc/ssl/rabbitmq_server_key.pem',
   $cert_keyname = '/etc/ssl/rabbitmq_server_cert.pem',
-  $cacert_keyname = '/etc/ssl/rabbitmq_server_key.pem',
+  $cacert_keyname = '/etc/ssl/rabbitmq_cacert.pem',
 )
 {
 
