@@ -13,10 +13,14 @@ class role_sensu::client(
   $disk_critical_perc = 95,
 ){
 
+  $disk_plugins = {}
+  $disk_checks = {}
+
   role_sensu::keys::client { 'client_keys' :
     private => $client_key,
     cert    => $client_cert,
   } ->
+
 
   class { 'sensu':
     #purge_config             => true,
@@ -33,33 +37,31 @@ class role_sensu::client(
     }
   }
 
-  class { 'role_sensu::plugins':
-    plugins => $plugins
-  }
+
 
   if $check_disk {
 
-    class { 'role_sensu::plugins':
-      plugins => {
+    $disk_plugins = {
         'sensu-plugins-disk-checks' => {},
         'sensu-plugins-load-checks' => {}
-      }
     }
 
-    class { 'role_sensu::checks':
-      checks => {
-        'check_disk_space'  => {
-          'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"
-        },
-        'check_disk_mounts' => {
+    $disk_checks = {
+      'check_disk_space'  => {
+        'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"
+      },
+      'check_disk_mounts' => {
           'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb'
-        }
       }
     }
+  }
 
+
+  class { 'role_sensu::plugins':
+    plugins => merge($plugins, $disk_plugins)
   }
 
   class { 'role_sensu::checks':
-    checks => $checks
+    checks => merge($checks, $disk_checks)
   }
 }
