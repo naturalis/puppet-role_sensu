@@ -41,19 +41,24 @@ class role_sensu::client(
 
   if $check_disk {
 
-    $disk_plugins = {
-        'sensu-plugins-disk-checks' => {},
-        'sensu-plugins-load-checks' => {}
-    }
+    $disk_plugins['sensu-plugins-disk-checks'] = {}
+    $disk_plugins['sensu-plugins-load-checks'] = {}
 
-    $disk_checks = {
-      'check_disk_space'  => {
-        'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"
-      },
-      'check_disk_mounts' => {
-          'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb'
-      }
-    }
+    $disk_checks['check_disk_space'] = { 'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"}
+    $disk_checks['check_disk_mounts'] = {'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb' }
+    # $disk_plugins = {
+    #     'sensu-plugins-disk-checks' => {},
+    #     'sensu-plugins-load-checks' => {}
+    # }
+    #
+    # $disk_checks = {
+    #   'check_disk_space'  => {
+    #     'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"
+    #   },
+    #   'check_disk_mounts' => {
+    #       'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb'
+    #   }
+    # }
   }
 
 
