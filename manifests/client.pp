@@ -21,8 +21,13 @@ class role_sensu::client(
     rabbitmq_host            => $sensu_server,
     subscriptions            => 'sensu-test',
     use_embedded_ruby        => true,
+    client_port              => '3030',
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
+    client_keepalive         => {
+        'handlers' => ['default']
+      }
+    }
 
   }
 }

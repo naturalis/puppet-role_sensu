@@ -90,6 +90,7 @@ class role_sensu::server(
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
+    client_port              => '3030',
   } ->
 
 
