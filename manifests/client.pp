@@ -38,12 +38,14 @@ class role_sensu::client(
   }
 
   if $check_disk {
+
     class { 'role_sensu::plugins':
       plugins => {
-        'sensu-plugins-disk-checks',
-        'sensu-plugins-load-checks'
+        'sensu-plugins-disk-checks' => {},
+        'sensu-plugins-load-checks' => {}
       }
     }
+
     class { 'role_sensu::checks':
       checks => {
         'check_disk_space'  => {
@@ -54,6 +56,7 @@ class role_sensu::client(
         }
       }
     }
+
   }
 
   class { 'role_sensu::checks':
