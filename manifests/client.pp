@@ -58,6 +58,7 @@ class role_sensu::client(
 
   if size($processes_to_check) > 0 {
     $builtin_plugins['sensu-plugins-process-checks'] = {}
+    role_sensu::check_process_installer { $processes_to_check : }
   }
 
   class { 'role_sensu::plugins':
