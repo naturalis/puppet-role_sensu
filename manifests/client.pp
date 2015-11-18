@@ -15,6 +15,7 @@ class role_sensu::client(
 
   $disk_plugins = {}
   $disk_checks = {}
+  $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin/ruby'
 
   role_sensu::keys::client { 'client_keys' :
     private => $client_key,
@@ -44,8 +45,8 @@ class role_sensu::client(
     $disk_plugins['sensu-plugins-disk-checks'] = {}
     $disk_plugins['sensu-plugins-load-checks'] = {}
 
-    $disk_checks['check_disk_space'] = { 'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"}
-    $disk_checks['check_disk_mounts'] = {'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb' }
+    $disk_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"}
+    $disk_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
     # $disk_plugins = {
     #     'sensu-plugins-disk-checks' => {},
     #     'sensu-plugins-load-checks' => {}
