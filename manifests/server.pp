@@ -80,7 +80,6 @@ class role_sensu::server(
     server                   => true,
     #purge_config             => true,
     rabbitmq_password        => $rabbitmq_password,
-    redis_reconnect_on_error => true,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => 'localhost',
@@ -91,7 +90,6 @@ class role_sensu::server(
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
-    client_port              => '3030',
   } ->
 
 
