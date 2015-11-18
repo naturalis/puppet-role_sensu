@@ -6,8 +6,8 @@ define role_sensu::plugin_installer (
 ) {
 
   exec { "Installing Sensu Gem: ${title}" :
-    cmd    => "/opt/sensu/embedded/bin/gem --install-dir /opt/sensu/embedded/lib/ruby/gems/2.0.0 ${title}",
-    unless => "/opt/sensu/embedded/bin/gem list --local | grep ${title}"
+    command => "/opt/sensu/embedded/bin/gem --install-dir /opt/sensu/embedded/lib/ruby/gems/2.0.0 ${title}",
+    unless  => "/opt/sensu/embedded/bin/gem list --local | grep ${title}"
   }
 
   # package { $title:
