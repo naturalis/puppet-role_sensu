@@ -9,8 +9,8 @@ class role_sensu::client(
 ){
 
   role_sensu::keys::client { 'client_keys' :
-    private => $client_cert,
-    cert    => $client_key,
+    private => $client_key,
+    cert    => $client_cert,
   } ->
 
   class { 'sensu':
