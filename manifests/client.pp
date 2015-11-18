@@ -12,8 +12,8 @@ class role_sensu::client(
   $disk_warning       = 85,
   $disk_critical      = 95,
   $check_load         = true,
-  $load_warning       = '3,3,3',
-  $load_critical      = '100,99,95'
+  $load_warning       = '0.3,0.3,0.3',
+  $load_critical      = '1,0.99,0.95'
 
 ){
 
