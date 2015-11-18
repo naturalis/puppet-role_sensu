@@ -31,7 +31,7 @@ class role_sensu::client(
 
   class { 'sensu':
     purge_config             => true,
-    manage_plugins_dir       => false,
+    sensu_plugin_name        => 'ruby',
     rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
