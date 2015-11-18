@@ -28,11 +28,11 @@ class role_sensu::client(
     client_keepalive         => {
       'handlers' => ['default']
     }
-  } ->
+  }
 
   class { 'role_sensu::plugins':
     plugins => $plugins
-  } ->
+  }
 
   class { 'role_sensu::checks':
     checks => $checks
