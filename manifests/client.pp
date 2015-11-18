@@ -15,7 +15,7 @@ class role_sensu::client(
 
   $disk_plugins = {}
   $disk_checks = {}
-  $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin/ruby'
+  $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
 
   role_sensu::keys::client { 'client_keys' :
     private => $client_key,
