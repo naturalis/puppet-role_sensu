@@ -13,7 +13,8 @@ class role_sensu::client(
   $disk_critical      = 95,
   $check_load         = true,
   $load_warning       = '0.3,0.3,0.3',
-  $load_critical      = '1,0.99,0.95'
+  $load_critical      = '1,0.99,0.95',
+  $processes_to_check = []
 
 ){
 
@@ -44,7 +45,6 @@ class role_sensu::client(
   }
 
 
-
   if $check_disk {
     $builtin_plugins['sensu-plugins-disk-checks'] = {}
     $builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
@@ -56,6 +56,10 @@ class role_sensu::client(
     $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical} --per-core"}
   }
 
+  if size($processes_to_check) > 0 {
+    $builtin_plugins['sensu-plugins-process-checks'] = {}
+  }
+
   class { 'role_sensu::plugins':
     plugins => merge($plugins, $builtin_plugins)
   }
@@ -63,4 +67,6 @@ class role_sensu::client(
   class { 'role_sensu::checks':
     checks => merge($checks, $builtin_checks)
   }
+
+
 }
