@@ -14,7 +14,7 @@ class role_sensu::client(
   } ->
 
   class { 'sensu':
-    purge_config             => true,
+    #purge_config             => true,
     rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
@@ -22,5 +22,7 @@ class role_sensu::client(
     subscriptions            => 'sensu-test',
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
+    rabbitmq_vhost           => '/sensu',
+
   }
 }

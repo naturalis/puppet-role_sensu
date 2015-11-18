@@ -10,10 +10,11 @@ define role_sensu::rabbitmq (
 {
 
   class { 'rabbitmq':
-    ssl_key    => $public_keyname,
-    ssl_cert   => $cert_keyname,
-    ssl_cacert => $cacert_keyname,
-    ssl        => true,
+    ssl_key           => $public_keyname,
+    ssl_cert          => $cert_keyname,
+    ssl_cacert        => $cacert_keyname,
+    ssl               => true,
+    delete_guest_user => true,
   }
 
   # ssl_key    => '/etc/rabbitmq/ssl//server_key.pem',
