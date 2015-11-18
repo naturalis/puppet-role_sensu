@@ -9,12 +9,17 @@ class role_sensu::client(
   $plugins            = {},
   $checks             = {},
   $check_disk         = true,
-  $disk_warning_perc  = 85,
-  $disk_critical_perc = 95,
+  $disk_warning       = 85,
+  $disk_critical      = 95,
+  $check_load         = true,
+  $load_warning       = '3,3,3',
+  $load_critical      = '100,99,95'
+
 ){
 
-  $disk_plugins = {}
-  $disk_checks = {}
+  $builtin_checks = {}
+  $builtin_plugins = {}
+
   $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
 
   role_sensu::keys::client { 'client_keys' :
@@ -41,33 +46,21 @@ class role_sensu::client(
 
 
   if $check_disk {
-
-    $disk_plugins['sensu-plugins-disk-checks'] = {}
-    $disk_plugins['sensu-plugins-load-checks'] = {}
-
-    $disk_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"}
-    $disk_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
-    # $disk_plugins = {
-    #     'sensu-plugins-disk-checks' => {},
-    #     'sensu-plugins-load-checks' => {}
-    # }
-    #
-    # $disk_checks = {
-    #   'check_disk_space'  => {
-    #     'command' => "/opt/sensu/embedded/bin/ruby check-disk-usage.rb -w ${disk_warning_perc} -c ${disk_critical_perc}"
-    #   },
-    #   'check_disk_mounts' => {
-    #       'command' => '/opt/sensu/embedded/bin/ruby check-fstab-mounts.rb'
-    #   }
-    # }
+    $builtin_plugins['sensu-plugins-disk-checks'] = {}
+    $builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
+    $builtin_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
   }
 
+  if $check_load {
+    $builtin_plugins['sensu-plugins-load-checks'] = {}
+    $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical} --per-core"}
+  }
 
   class { 'role_sensu::plugins':
-    plugins => merge($plugins, $disk_plugins)
+    plugins => merge($plugins, $builtin_plugins)
   }
 
   class { 'role_sensu::checks':
-    checks => merge($checks, $disk_checks)
+    checks => merge($checks, $builtin_checks)
   }
 }
