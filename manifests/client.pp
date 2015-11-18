@@ -5,7 +5,9 @@ class role_sensu::client(
   $client_cert,
   $client_key,
   $rabbitmq_password = 'bladiebla',
-  $sensu_server      = '127.0.0.1'
+  $sensu_server      = '127.0.0.1',
+  $plugins           = {},
+  $checks            = {},
 ){
 
   role_sensu::keys::client { 'client_keys' :
@@ -21,9 +23,18 @@ class role_sensu::client(
     rabbitmq_host            => $sensu_server,
     subscriptions            => 'sensu-test',
     use_embedded_ruby        => true,
-    client_custom              => {'port' => '3030'},
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
-    client_keepalive         => { 'handlers' => ['default'] }
+    client_keepalive         => {
+      'handlers' => ['default']
+    }
+  } ->
+
+  class { 'role_sensu::plugins':
+    plugins => $plugins
+  } ->
+
+  class { 'role_sensu::checks':
+    checks => $checks
   }
 }
