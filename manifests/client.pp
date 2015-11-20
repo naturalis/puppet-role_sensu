@@ -14,6 +14,7 @@ class role_sensu::client(
   $check_load         = true,
   $load_warning       = '0.3,0.3,0.3',
   $load_critical      = '1,0.99,0.95',
+  $reboot_warning     = true,
   $processes_to_check = []
 
 ){
@@ -47,6 +48,9 @@ class role_sensu::client(
     }
   }
 
+  if $reboot_warning {
+    $builtin_plugins['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ]; then return 1; fi' }
+  }
 
   if $check_disk {
     $builtin_plugins['sensu-plugins-disk-checks'] = {}
