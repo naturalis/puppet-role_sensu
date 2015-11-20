@@ -49,7 +49,7 @@ class role_sensu::client(
   }
 
   if $reboot_warning {
-    $builtin_plugins['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ]; then return 1; fi' }
+    $builtin_checks['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ]; then return 1; fi' }
   }
 
   if $check_disk {
