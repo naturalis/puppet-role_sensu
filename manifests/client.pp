@@ -28,6 +28,7 @@ class role_sensu::client(
     cert    => $client_cert,
   } ->
 
+  class { 'role_sensu::install_apt_repo': } ->
 
   class { 'sensu':
     purge_config             => true,
