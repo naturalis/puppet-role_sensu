@@ -29,7 +29,12 @@ class role_sensu::install_apt_repo {
         'source' => $repo_key_source,
       },
       before   => Package['sensu'],
-      notify   => Class['apt::update'],
+      notify   => Exec['apt-update'],
+    }
+
+    exec { 'apt-update':
+      refreshonly => true,
+      command     => '/usr/bin/apt-get update',
     }
 
   } else {
