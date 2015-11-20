@@ -8,16 +8,16 @@ class role_sensu::install_apt_repo {
 
   if defined(apt::source) {
 
-    $ensure = $sensu::install_repo ? {
-      true    => 'present',
-      default => 'absent'
-    }
+    # $ensure = $sensu::install_repo ? {
+    #   true    => 'present',
+    #   default => 'absent'
+    # }
 
 
     $url = 'http://repos.sensuapp.org/apt'
 
-    apt::source { 'sensu':
-      ensure   => $ensure,
+    apt::source { 'sensu_repo':
+      ensure   => present,
       location => $url,
       release  => 'sensu',
       repos    => 'main',
