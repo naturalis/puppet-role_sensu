@@ -27,7 +27,7 @@ class role_sensu::client(
 ){
 
   $builtin_checks = {}
-  $builtin_plugins = []
+  $builtin_plugins = ['sensu-plugins-disk-checks', 'sensu-plugins-load-checks', 'sensu-plugins-process-checks' ]
 
 
   $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
@@ -61,7 +61,7 @@ class role_sensu::client(
   }
 
   if $check_disk {
-    $builtin_plugins += 'sensu-plugins-disk-checks'
+    #$builtin_plugins += 'sensu-plugins-disk-checks'
     #$builtin_plugins['sensu-plugins-disk-checks'] = {}
     $builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
     $builtin_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
@@ -69,13 +69,13 @@ class role_sensu::client(
 
   if $check_load {
     #$builtin_plugins['sensu-plugins-load-checks'] = {}
-    $builtin_plugins += 'sensu-plugins-load-checks'
+    #$builtin_plugins += 'sensu-plugins-load-checks'
     $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical} --per-core"}
   }
 
   if size($processes_to_check) > 0 {
     #$builtin_plugins['sensu-plugins-process-checks'] = {}
-    $builtin_plugins += 'sensu-plugins-process-checks'
+    #$builtin_plugins += 'sensu-plugins-process-checks'
     role_sensu::check_process_installer { $processes_to_check : }
   }
 
