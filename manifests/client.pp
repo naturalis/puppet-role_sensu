@@ -84,8 +84,8 @@ class role_sensu::client(
   # class { 'role_sensu::plugins':
   #   plugins => merge($plugins, $builtin_plugins)
   # }
-
-  role_sensu::plugin_installer { unique(concat($plugins, $builtin_plugins)) : }
+  $plugin_array = unique(concat($plugins, $builtin_plugins))
+  role_sensu::plugin_installer { $plugin_array : }
 
   class { 'role_sensu::checks':
     checks   => merge($checks, $builtin_checks),
