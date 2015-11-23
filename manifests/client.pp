@@ -88,6 +88,6 @@ class role_sensu::client(
     defaults => $checks_defaults,
   }
 
-  create_resources('role_sensu::plugin_installer', unique(concat($plugins,$builtin_plugins)), [])
+  create_resources('role_sensu::plugin_installer', unique(concat($plugins,$builtin_plugins)), {})
 
 }
