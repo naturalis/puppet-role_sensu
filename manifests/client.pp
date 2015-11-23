@@ -18,11 +18,12 @@ class role_sensu::client(
   $processes_to_check = [],
   $subscriptions      = ['appserver'],
   $checks_defaults    = {
-    interval    => 600,
-    occurrences => 3,
-    refresh     => 60,
-    handlers    => [ 'default'],
-    standalone  => false },
+    interval      => 600,
+    occurrences   => 3,
+    refresh       => 60,
+    handlers      => [ 'default'],
+    subscriptions => ['appserver']
+    standalone    => false },
 
 ){
 
