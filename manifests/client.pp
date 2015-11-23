@@ -29,6 +29,7 @@ class role_sensu::client(
   $builtin_checks = {}
   $builtin_plugins = []
 
+
   $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
 
   role_sensu::keys::client { 'client_keys' :
