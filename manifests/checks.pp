@@ -2,8 +2,9 @@
 #
 #
 class role_sensu::checks(
-      $checks = {}
+      $checks = {},
+      $defaults = {}
 )
 {
-  create_resources( 'sensu::check', $checks, {} )
+  create_resources( 'sensu::check', $checks, $defaults )
 }

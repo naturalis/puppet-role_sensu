@@ -43,7 +43,10 @@ class role_sensu::server(
   $client_key,
   $rabbitmq_password = 'bladiebla',
   $api_user          = 'sensu_api',
-  $api_password      = 'bladiebla'
+  $api_password      = 'bladiebla',
+  $sensu_username    = 'sensu',
+  $sensu_password    = 'bladiebla',
+  $subscriptions     = ['appserver']
 ){
 
 
@@ -76,14 +79,17 @@ class role_sensu::server(
 
   class { 'redis': } ->
 
+  class { 'role_sensu::install_apt_repo': } ->
+
   class { 'sensu':
     server                   => true,
     #purge_config             => true,
+    install_repo             => false,
     rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
     rabbitmq_host            => 'localhost',
-    subscriptions            => 'sensu-test',
+    subscriptions            => $subscriptions,
     api                      => true,
     api_user                 => $api_user,
     api_password             => $api_password,
@@ -95,8 +101,8 @@ class role_sensu::server(
 
   class { 'uchiwa':
     sensu_api_endpoints => $uchiwa_api_config,
-    user                => $api_user,
-    pass                => $api_password,
+    user                => $sensu_username,
+    pass                => $sensu_password,
     install_repo        => false            # otherwise you get this: Apt::Source[sensu] is already declared in file /etc/puppet/modules/sensu/manifests/repo/apt.pp
   }
 
