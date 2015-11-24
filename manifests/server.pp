@@ -127,7 +127,7 @@ class role_sensu::server(
   nginx::resource::vhost { 'sensu.naturalis.nl':
     proxy       => 'http://sensu_naturalis_nl',
     ssl         => true,
-    listen_port => 443
+    listen_port => 443,
     ssl_cert    => '/etc/ssl/web_client_cert.pem',
     ssl_key     => '/etc/ssl/web_client_key.pem',
   }
