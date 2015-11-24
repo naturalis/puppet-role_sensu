@@ -6,5 +6,5 @@ define role_sensu::check_process_installer(){
   $hash = { "check_process_${title}" =>
     {'command' => "${ruby_run_comand} check-process.rb -p -${title}"}
   }
-  create_resources( 'sensu::check', $hash, $::role_sensu::checks_defaults )
+  create_resources( 'sensu::check', $hash, $role_sensu::checks_defaults )
 }
