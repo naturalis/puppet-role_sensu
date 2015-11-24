@@ -41,12 +41,14 @@ class role_sensu::server(
   $cacert,
   $client_cert,
   $client_key,
+  $web_client_key,
+  $web_client_cert,
   $rabbitmq_password = 'bladiebla',
   $api_user          = 'sensu_api',
   $api_password      = 'bladiebla',
   $sensu_username    = 'sensu',
   $sensu_password    = 'bladiebla',
-  $subscriptions     = ['appserver']
+  $subscriptions     = ['appserver'],
 ){
 
 
@@ -107,6 +109,29 @@ class role_sensu::server(
     pass                => $sensu_password,
     install_repo        => false            # otherwise you get this: Apt::Source[sensu] is already declared in file /etc/puppet/modules/sensu/manifests/repo/apt.pp
   }
+
+
+  role_sensu::keys::client { 'nginx_keys' :
+    private         => $web_client_key,
+    cert            => $web_client_cert,
+    private_keyname => '/etc/ssl/web_client_key.pem',
+    cert_keyname    => '/etc/ssl/web_client_cert.pem'
+  } ->
+
+  class {'nginx': }
+
+  nginx::resource::upstream { 'sensu_naturalis_nl':
+    members => ['localhost:3000'],
+  }
+
+  nginx::resource::vhost { 'sensu.naturalis.nl':
+    proxy       => 'http://sensu_naturalis_nl',
+    ssl         => true,
+    listen_port => 443
+    ssl_cert    => '/etc/ssl/web_client_cert.pem',
+    ssl_key     => '/etc/ssl/web_client_key.pem',
+  }
+
 
 
 
