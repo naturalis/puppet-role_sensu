@@ -6,5 +6,5 @@ class role_sensu::checks(
       $defaults = {}
 )
 {
-  create_resources( 'sensu::check', $checks, {} )
+  create_resources( 'sensu::check', $checks, $defaults )
 }

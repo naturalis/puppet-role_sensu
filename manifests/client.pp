@@ -23,7 +23,7 @@ class role_sensu::client(
     refresh       => 60,
     handlers      => [ 'default'],
     subscribers   => ['appserver'],
-    standalone    => false },
+    standalone    => true },
 
 ){
 
