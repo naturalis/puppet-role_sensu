@@ -85,6 +85,8 @@ class role_sensu::server(
     server                   => true,
     #purge_config             => true,
     install_repo             => false,
+    #fix for sensu always doing something
+    sensu_plugin_name        => 'ruby',
     rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
