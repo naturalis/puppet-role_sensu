@@ -72,7 +72,7 @@ class role_sensu::client(
   if $check_load {
     #$builtin_plugins['sensu-plugins-load-checks'] = {}
     #$builtin_plugins += 'sensu-plugins-load-checks'
-    $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical} --per-core"}
+    $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}
   }
 
   if size($processes_to_check) > 0 {
