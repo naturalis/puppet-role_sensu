@@ -94,6 +94,15 @@ class role_sensu::client(
     defaults => $checks_defaults,
   }
 
+  Sensu::Check <| tag == 'central_sensu' |> {
+    interval    => $checks_defaults['interval'],
+    occurrences => $checks_defaults['occurrrences'],
+    refresh     => $checks_defaults['refresh'],
+    handlers    => $checks_defaults['handlers'],
+    subscribers => $checks_defaults['subscribers'],
+    standalone  => $checks_defaults['standalone'],
+  }
+
   #create_resources('role_sensu::plugin_installer', unique(concat($plugins, $builtin_plugins)), [])
 
 }
