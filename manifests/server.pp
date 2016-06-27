@@ -152,6 +152,7 @@ class role_sensu::server(
       proxy       => 'http://sensuapi_naturalis_nl',
       ssl         => true,
       listen_port => 8443,
+      ssl_port    => 8443,
       ssl_cert    => '/etc/ssl/web_client_cert.pem',
       ssl_key     => '/etc/ssl/web_client_key.pem',
     }
