@@ -49,6 +49,9 @@ class role_sensu::server(
   $sensu_username    = 'sensu',
   $sensu_password    = 'bladiebla',
   $subscriptions     = ['appserver'],
+  $uchiwa_dns_name   = 'sensu.naturalis.nl',
+  $expose_api        = false,
+  $extra_uchiwa_cons = [],
 ){
 
 
@@ -63,6 +66,13 @@ class role_sensu::server(
       timeout  => 5
       }
     ]
+
+  if (count($extra_uchiwa_cons) > 0) {
+    $sensu_api_endpoints = concat($uchiwa_api_config,$extra_uchiwa_cons)
+  }else{
+    $sensu_api_endpoints = $uchiwa_api_config
+  }
+
 
   role_sensu::keys::server { 'server_keys' :
     private => $server_key,
@@ -104,7 +114,7 @@ class role_sensu::server(
 
 
   class { 'uchiwa':
-    sensu_api_endpoints => $uchiwa_api_config,
+    sensu_api_endpoints => $sensu_api_endpoints,
     user                => $sensu_username,
     pass                => $sensu_password,
     install_repo        => false            # otherwise you get this: Apt::Source[sensu] is already declared in file /etc/puppet/modules/sensu/manifests/repo/apt.pp
@@ -124,7 +134,7 @@ class role_sensu::server(
     members => ['localhost:3000'],
   }
 
-  nginx::resource::vhost { 'sensu.naturalis.nl':
+  nginx::resource::vhost { $uchiwa_dns_name :
     proxy       => 'http://sensu_naturalis_nl',
     ssl         => true,
     listen_port => 443,
@@ -132,101 +142,20 @@ class role_sensu::server(
     ssl_key     => '/etc/ssl/web_client_key.pem',
   }
 
+  if (expose_api) {
 
+    nginx::resource::upstream { 'sensuapi_naturalis_nl':
+      members => ['localhost:4567'],
+    }
 
-
-  # if $rabbitmq_password == 'changeme' {
-  #   fail('please change the rabbitmq_password')
-  # }
-  #
-  # if $sensu_cluster_name == 'changeme' {
-  #   fail('please change the sensu_cluser_name')
-  # }
-  #
-
-  # class { 'redis': } ->
-  #
-  # class { 'rabbitmq': } ->
-  #
-  # exec { 'added rabbitmq user Sensu since stupid puppet module doenst work':
-  #   command => '/usr/sbin/rabbitmqctl add_user sensu',
-  #   unless  => '/usr/sbin/rabbitmqctl list_users | /bin/grep sensu',
-  # } ->
-  #
-  # exec { 'added rabbitmq vhost Sensu since stupid puppet module doenst work':
-  #   command => '/usr/sbin/rabbitmqctl add_vhost sensu',
-  #   unless  => '/usr/sbin/rabbitmqctl list_vhosts | /bin/grep sensu',
-  # } ->
-  #
-  # # rabbitmq_user { 'sensu':
-  # #   password => '',
-  # #   require  => Class['rabbitmq'],
-  # # }
-  #
-  # # rabbitmq_vhost { 'sensu':
-  # #   ensure  => present,
-  # # } ->
-  # exec { 'added rabbitmq persmissions of sensu vhost since stupid puppet module doenst work':
-  #   command => '/usr/sbin/rabbitmqctl set_permissions -p sensu ".*" ".*" ".*"',
-  #   unless  => '/usr/sbin/rabbitmqctl list_permissions -p sensu | /bin/grep -v vhost | grep sensu',
-  # } ->
-  #
-  # # rabbitmq_user_permissions { 'sensu@sensu':
-  # #   configure_permission => '.*',
-  # #   read_permission      => '.*',
-  # #   write_permission     => '.*',
-  # # } ->
-  #
-  # class { 'sensu':
-  #   rabbitmq_password => '',
-  #   server            => true,
-  #   api               => true,
-  #   use_embedded_ruby => true,
-  #   subscriptions     => ['sensu-test','sensu-server'],
-  # }
-  #
-  # Sensu::Check <<| tag == "sensu_check_${sensu_cluster_name}" |>>
-  #
-  # # sensu::handler { 'default':
-  # #   command => 'mail -s \'sensu alert\' aut@naturalis.nl',
-  # # }
-  #
-  # class { 'uchiwa':
-  #   install_repo => false,
-  # }
-  #
-  # uchiwa::api { 'Default Uchiwa API':
-  #   host => $::ipaddress,
-  #   user => '',
-  #   pass => '',
-  # }
-  #
-  # package {'git': }
-  #
-  # vcsrepo { '/opt/sensu-community-plugins':
-  #   ensure   => present,
-  #   provider => git,
-  #   source   => 'git://github.com/sensu/sensu-community-plugins',
-  #   require  => Package['git'],
-  # }
-  #
-  # # needs package ruby-dev
-  # # needs gem install mail sensu-plugin
-  #
-  # sensu::handler {'default':
-  #   command => '/opt/sensu-community-plugins/handlers/notification/mailer.rb',
-  # }
-  #
-  # file {'/etc/sensu/conf.d/mailer.json':
-  #   ensure  => present,
-  #   content => template('role_sensu/config/mailer.json.erb'),
-  #   notify  => Service['sensu-server'],
-  # }
-  #
-
-
-
-
+    nginx::resource::vhost { $uchiwa_dns_name :
+      proxy       => 'http://sensuapi_naturalis_nl',
+      ssl         => true,
+      listen_port => 8443,
+      ssl_cert    => '/etc/ssl/web_client_cert.pem',
+      ssl_key     => '/etc/ssl/web_client_key.pem',
+    }
+  }
 
 
 }

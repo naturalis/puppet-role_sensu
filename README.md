@@ -63,3 +63,29 @@ $rabbitmq_password  = 'bladiebla',
 $sensu_server       = '127.0.0.1',
 ```
 There are central configurations, no need to change them, once they are configured correctly.
+
+## configure sensu server
+
+You can now set multipe uchiwa connections to different sensu servers.
+
+configure the array `$extra_uchiwa_cons` as
+```
+- name: 'extra server name'
+  host: 'dns or ip of new host'
+  ssl: true
+  insecure: true
+  port: 8443
+  user: 'your api username'
+  pass: 'your api password'
+  timeout: 5
+- name: 'extra server name 2'
+  host: 'dns or ip of new host 2'
+  ssl: true
+  insecure: true
+  port: 8443
+  user: 'your api username'
+  pass: 'your api password'
+  timeout: 5
+```
+
+On the server where you want to connect you have to expose the api to the outside world. You can do this by setting the variable `$expose_api = true`. This will expose the api on port 8443 over ssl.
