@@ -148,7 +148,7 @@ class role_sensu::server(
       members => ['localhost:4567'],
     }
 
-    nginx::resource::vhost { $uchiwa_dns_name :
+    nginx::resource::vhost { 'sensu api expose' :
       proxy       => 'http://sensuapi_naturalis_nl',
       ssl         => true,
       listen_port => 8443,
