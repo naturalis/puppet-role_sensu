@@ -42,7 +42,6 @@ class role_sensu::client(
   class { 'role_sensu::install_apt_repo': } ->
 
   class { 'sensu':
-    purge_config             => true,
     install_repo             => false,
     sensu_plugin_name        => 'ruby',
     rabbitmq_password        => $rabbitmq_password,
@@ -53,6 +52,9 @@ class role_sensu::client(
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
+    purge                    => {
+      'config'   => true
+    },
     client_keepalive         => {
       'handlers' => ['default']
     }

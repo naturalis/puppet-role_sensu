@@ -32,7 +32,7 @@ class role_sensu::install_apt_repo {
       notify   => Exec['apt-update'],
     }
 
-    exec { 'apt-update':
+    exec { 'apt-update-custom':
       refreshonly => true,
       command     => '/usr/bin/apt-get update',
     }
