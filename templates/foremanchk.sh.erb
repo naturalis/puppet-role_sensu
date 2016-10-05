@@ -1,0 +1,134 @@
+#!/bin/bash
+#
+# Checking Error, Warning and OK reported servers using Hammer for the Foreman monitoring
+# accepts commandline commands  
+#      no command = run interactive and output to STDOUT
+#      cron = create hammer output files to /tmp
+#      report = use files in /tmp as input for reports 
+#
+# cron + report is created as a workaround for not being able to run hammer using an account with no login. (sensu account)
+#
+
+# define user and password for use with Hammer
+user=<%= @hammer_user %> 
+password=<%= @hammer_password %> 
+
+# set character on which to split strings
+IFS=#
+set -f
+
+# Output hammer commands to file in /tmp using cron mode 
+if [ "$1" == "cron" ] 
+then
+  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 5 'global_status_label: Warning' | grep -A 1 configuration_status_label | awk {print} ORS=""`
+  geterrors=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Error' | grep -A 3 configuration_status_label | awk {print} ORS=""`
+  getoks=`hammer -u $user -p $password --output yaml host list | grep -A 1 'global_status_label: OK' | awk {print} ORS=""`
+  echo $getwarnings > /tmp/foremanwarnings
+  echo $geterrors > /tmp/foremanerrors
+  echo $getoks > /tmp/foremanoks
+  exit 0
+fi
+
+# in report mode use files in /tmp instead of hammer commands. cron job must exist to make this work. 
+if [ "$1" == "report" ] 
+then
+  getwarnings=`cat /tmp/foremanwarnings`
+  geterrors=`cat /tmp/foremanerrors`
+  getoks=`cat /tmp/foremanoks`
+else
+  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 5 'global_status_label: Warning' | grep -A 1 configuration_status_label | awk {print} ORS=""`
+  geterrors=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Error' | grep -A 3 configuration_status_label | awk {print} ORS=""`
+  getoks=`hammer -u $user -p $password --output yaml host list | grep -A 1 'global_status_label: OK' | awk {print} ORS=""`
+fi
+
+# set counts on 0
+errors=0
+warnings=0
+oks=0
+
+# error handling
+if [ -n "$geterrors" ]
+then
+  geterrors=${geterrors//--/#}                           # replace double dash by asterix to prepare for line breaks
+  geterrors=${geterrors// name:/^}                       # replace name field by ^ to prepare servername extraction
+  geterrors=${geterrors//configuration_status_label:/&}  # replace status field by & to prepare status extraction
+  errorsarray=($geterrors)                               # create array from string
+  for i in "${errorsarray[@]}"; do                       # loop over the array elements.
+    errors=`expr $errors + 1`                            # error counter
+  done
+  if [ "$errors" -ge "1" ]                               # run extract error + server when error count => 1
+  then
+  echo $errors errors found
+    for i in "${errorsarray[@]}"; do # loop over the array elements.
+      start1=`expr index "$i" '&'` 
+      part1=${i:$start1+1}
+
+      part14end2=${part1//build_status:/^}
+      end2=`expr index "$part14end2" '^'` 
+
+      error_msg=${i:$start1+1:$end2-1}
+      start3=`expr index "$part1" '^'` 
+      end3=`expr index "${part1:$start3+3}" ' '`
+      if [ "$start3" -gt "$end3" ] 
+        then
+          error_server=${part1:$start3+1}
+        else
+          error_server=${part1:$start3+1:end3}
+      fi
+      echo $error_server $error_msg
+    done
+  fi
+fi
+
+# warnings handling
+if [ -n "$getwarnings" ]
+  then
+  getwarnings=${getwarnings//--/#} # replace double dash by asterix to prepare for line breaks
+  warningsarray=($getwarnings) # create array from string
+  for i in "${warningsarray[@]}"; do # loop over the array elements.
+    warnings=`expr $warnings + 1` # warning counter
+  done
+  if [ "$warnings" -ge "1" ]
+  then
+    echo $warnings warnings found
+    for i in "${warningsarray[@]}"; do # loop over the array elements.
+      start1=`expr index "$i" ':'` 
+      part1=${i:$start1+1}   
+      start2=`expr index "$part1" ':'` 
+      warning_msg=${i:$start1+1:$start2-5}   
+      warning_server=${part1:$start2+1}   
+      echo $warning_server $warning_msg
+    done
+  fi
+fi
+
+# oks handling
+if [ -n "$getoks" ]
+  then
+  getoks=${getoks//--/#}
+  getokarray=($getoks)
+  for i in "${getokarray[@]}"; do # loop over the array elements.
+    oks=`expr $oks + 1`
+  done
+  if [ "$oks" -gt "1" ]
+  then
+    echo $oks hosts reporting OK
+  fi
+fi
+
+
+if [ "$errors" -gt "1" ]
+  then
+    exit 2
+fi
+
+if [ "$warnings" -gt "1" ]
+  then
+    exit 1
+  else
+    exit 0
+fi
+
+
+
+
