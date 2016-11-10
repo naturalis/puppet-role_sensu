@@ -11,7 +11,7 @@
 
 # define user and password for use with Hammer
 user=<%= @hammer_user %> 
-password=<%= @hammer_password %> 
+password='<%= @hammer_password %>'
 
 # set character on which to split strings
 IFS=#
@@ -20,7 +20,7 @@ set -f
 # Output hammer commands to file in /tmp using cron mode 
 if [ "$1" == "cron" ] 
 then
-  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 5 'global_status_label: Warning' | grep -A 1 configuration_status_label | awk {print} ORS=""`
+  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Warning' | grep -A 3 configuration_status_label | awk {print} ORS=""`
   geterrors=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Error' | grep -A 3 configuration_status_label | awk {print} ORS=""`
   getoks=`hammer -u $user -p $password --output yaml host list | grep -A 1 'global_status_label: OK' | awk {print} ORS=""`
   echo $getwarnings > /tmp/foremanwarnings
@@ -36,7 +36,7 @@ then
   geterrors=`cat /tmp/foremanerrors`
   getoks=`cat /tmp/foremanoks`
 else
-  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 5 'global_status_label: Warning' | grep -A 1 configuration_status_label | awk {print} ORS=""`
+  getwarnings=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Warning' | grep -A 3 configuration_status_label | awk {print} ORS=""`
   geterrors=`hammer -u $user -p $password --output yaml host list | grep -A 7 'global_status_label: Error' | grep -A 3 configuration_status_label | awk {print} ORS=""`
   getoks=`hammer -u $user -p $password --output yaml host list | grep -A 1 'global_status_label: OK' | awk {print} ORS=""`
 fi
@@ -73,7 +73,7 @@ then
         then
           error_server=${part1:$start3+1}
         else
-          error_server=${part1:$start3+1:end3}
+          error_server=${part1:$start3+1:end3+1}
       fi
       echo $error_server $error_msg
     done
@@ -84,6 +84,8 @@ fi
 if [ -n "$getwarnings" ]
   then
   getwarnings=${getwarnings//--/#} # replace double dash by asterix to prepare for line breaks
+  getwarnings=${getwarnings// name:/^}                       # replace name field by ^ to prepare servername extraction
+  getwarnings=${getwarnings//configuration_status_label:/&} 
   warningsarray=($getwarnings) # create array from string
   for i in "${warningsarray[@]}"; do # loop over the array elements.
     warnings=`expr $warnings + 1` # warning counter
@@ -92,10 +94,11 @@ if [ -n "$getwarnings" ]
   then
     echo $warnings warnings found
     for i in "${warningsarray[@]}"; do # loop over the array elements.
-      start1=`expr index "$i" ':'` 
-      part1=${i:$start1+1}   
-      start2=`expr index "$part1" ':'` 
-      warning_msg=${i:$start1+1:$start2-5}   
+      start1=`expr index "$i" '^'` 
+      part1=${i:$start1}
+      start2=`expr index "$part1" '&'` 
+      end3=`expr index "${i:$start2+6}" ':'`
+      warning_msg=${i:$start2+6:end3-13} 
       warning_server=${part1:$start2+1}   
       echo $warning_server $warning_msg
     done
@@ -110,19 +113,19 @@ if [ -n "$getoks" ]
   for i in "${getokarray[@]}"; do # loop over the array elements.
     oks=`expr $oks + 1`
   done
-  if [ "$oks" -gt "1" ]
+  if [ "$oks" -gt "0" ]
   then
     echo $oks hosts reporting OK
   fi
 fi
 
 
-if [ "$errors" -gt "1" ]
+if [ "$errors" -gt "0" ]
   then
     exit 2
 fi
 
-if [ "$warnings" -gt "1" ]
+if [ "$warnings" -gt "0" ]
   then
     exit 1
   else
