@@ -28,7 +28,7 @@ class role_sensu::install_apt_repo {
         'id'     => $repo_key_id,
         'source' => $repo_key_source,
       },
-      before   => Package['sensu'],
+#      before   => Package['sensu'],
       notify   => Exec['apt-update'],
     }
 

@@ -91,7 +91,7 @@ class role_sensu::server(
 
   class { 'redis': } ->
 
-  class { 'role_sensu::install_apt_repo': } ->
+#  class { 'role_sensu::install_apt_repo': } ->
 
   class { 'sensu':
     server                   => true,

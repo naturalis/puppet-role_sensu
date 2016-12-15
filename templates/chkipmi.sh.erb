@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+#  Wrapper around IPMI check script. 
+#
+#  Command to find out sensor ID's, needed to exclude sensors using -x parameter
+#  /usr/sbin/ipmi-sensors -h <ip-of-host> -u ADMIN -p ADMIN -l Administrator --quiet-cache --sdr-cache-recreate --interpret-oem-data --output-sensor-state --ignore-not-available-sensors --driver-type=LAN_2_0 
+#
+#  Command to clear event log: ipmi-sel -h <ip-of-host> -u ADMIN -p ADMIN --clear
+#
+ip=<%= @ip %>
+extraoptions='<%= @options %>'
+user='<%= @user %>'
+password='<%= @password %>'
+script='<%= @script %>'
+defaultoptions=' -L Administrator -x 3689 -x 4091 -x 1746 -x 3287 -x 1545'    # exclude sensors ( chassis intrusion for example )
+
+command_output=`$script -H $ip -U $user -P $password $defaultoptions $extraoptions`
+
+if [[ $command_output == *"timeout"* ]]
+then
+  sleep 10
+  command_output=`$script -H $ip -U $user -P $password $defaultoptions $extraoptions`
+fi
+
+echo $command_output
+
+if [[ $command_output == *"Critical"* ]]
+then
+  exit 2;
+fi
+
+if [[ $command_output == *"Warning"* ]]
+then
+  exit 1;
+fi
+
