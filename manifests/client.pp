@@ -102,7 +102,7 @@ class role_sensu::client(
 
   class { 'role_sensu::checks':
     #checks   => merge($checks, $builtin_checks),
-    checks   => merge($checks, $reboot_check, $disk_check, $load_check )
+    checks   => merge($checks, $reboot_check, $disk_check, $load_check ),
     defaults => $checks_defaults,
   }
 
