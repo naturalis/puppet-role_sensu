@@ -61,20 +61,25 @@ class role_sensu::client(
   }
 
   if $reboot_warning {
-    $builtin_checks['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' }
+    $buildin_checks = $builtin_checks + { 'check_for_reboot_required' => {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' } }
+#    $builtin_checks['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' }
   }
 
   if $check_disk {
     #$builtin_plugins += 'sensu-plugins-disk-checks'
     #$builtin_plugins['sensu-plugins-disk-checks'] = {}
-    $builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
-    $builtin_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
+
+    $builtin_checks = $buildin_checks + {'check_disk_space' => { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}}
+    $builtin_checks = $buildin_checks + {'check_disk_mounts' => {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }}
+    #$builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
+    #$builtin_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
   }
 
   if $check_load {
     #$builtin_plugins['sensu-plugins-load-checks'] = {}
     #$builtin_plugins += 'sensu-plugins-load-checks'
-    $builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}
+    $builtin_checks = $builtin_checks + {'check_load' => {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}}
+    #$builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}
   }
 
   if size($processes_to_check) > 0 {
