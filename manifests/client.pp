@@ -27,6 +27,9 @@ class role_sensu::client(
 
 ){
 
+
+  ensure_packages(['make','gcc'], {'ensure' => 'present'})
+
   $builtin_checks = {}
   #$builtin_plugins = {}
   $builtin_plugins = ['sensu-plugins-disk-checks', 'sensu-plugins-load-checks', 'sensu-plugins-process-checks' ]
@@ -63,38 +66,24 @@ class role_sensu::client(
 
   if $reboot_warning {
     $reboot_check = { 'check_for_reboot_required' => {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' } }
-    #$buildin_checks = $builtin_checks + { 'check_for_reboot_required' => {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' } }
-#    $builtin_checks['check_for_reboot_required'] = {'command' => 'if [ -f /var/run/reboot-required ] ; then echo "reboot required" ; return 1 ; else echo "no reboot required" ;fi' }
   } else {
     $reboot_check = {}
   }
 
   if $check_disk {
-    #$builtin_plugins += 'sensu-plugins-disk-checks'
-    #$builtin_plugins['sensu-plugins-disk-checks'] = {}
     $disk_check = {'check_disk_space' => { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}, 'check_disk_mounts' => {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }}
-    #$builtin_checks = $buildin_checks +
-    #$builtin_checks = $buildin_checks + {'check_disk_mounts' => {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }}
-    #$builtin_checks['check_disk_space'] = { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}
-    #$builtin_checks['check_disk_mounts'] = {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }
   } else {
     $disk_check = {}
   }
 
 
   if $check_load {
-    #$builtin_plugins['sensu-plugins-load-checks'] = {}
-    #$builtin_plugins += 'sensu-plugins-load-checks'
     $load_check = {'check_load' => {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}}
-    #$builtin_checks = $builtin_checks +
-    #$builtin_checks['check_load'] = {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}
   } else {
       $load_check = {}
   }
 
   if size($processes_to_check) > 0 {
-    #$builtin_plugins['sensu-plugins-process-checks'] = {}
-    #$builtin_plugins += 'sensu-plugins-process-checks'
     role_sensu::check_process_installer { $processes_to_check :
       checks_defaults => $checks_defaults,
     }
@@ -107,7 +96,6 @@ class role_sensu::client(
   role_sensu::plugin_installer { $plugin_array : }
 
   class { 'role_sensu::checks':
-    #checks   => merge($checks, $builtin_checks),
     checks   => merge($checks, $reboot_check, $disk_check, $load_check ),
     defaults => $checks_defaults,
   }
