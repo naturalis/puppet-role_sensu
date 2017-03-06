@@ -35,8 +35,10 @@ class role_sensu::client(
   $builtin_plugins = ['sensu-plugins-disk-checks', 'sensu-plugins-load-checks', 'sensu-plugins-process-checks' ]
 
 
-  $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
 
+  #$ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
+  $ruby_run_comand = '/opt/sensu/embedded/bin'
+  
   role_sensu::keys::client { 'client_keys' :
     private => $client_key,
     cert    => $client_cert,
@@ -71,14 +73,14 @@ class role_sensu::client(
   }
 
   if $check_disk {
-    $disk_check = {'check_disk_space' => { 'command' => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"}, 'check_disk_mounts' => {'command' => "${ruby_run_comand} check-fstab-mounts.rb" }}
+    $disk_check = {'check_disk_space' => { 'command' => "${ruby_run_comand}/check-disk-usage.rb -w ${disk_warning} -c ${disk_critical} -t ext4,ext3,ext2,xfs,btrfs,zfs"}, 'check_disk_mounts' => {'command' => "${ruby_run_comand}/check-fstab-mounts.rb" }}
   } else {
     $disk_check = {}
   }
 
 
   if $check_load {
-    $load_check = {'check_load' => {'command' => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"}}
+    $load_check = {'check_load' => {'command' => "${ruby_run_comand}/check-load.rb -w ${load_warning} -c ${load_critical}"}}
   } else {
       $load_check = {}
   }
