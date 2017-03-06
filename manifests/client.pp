@@ -28,7 +28,7 @@ class role_sensu::client(
 ){
 
 
-  ensure_packages(['make','gcc'], {'ensure' => 'present'})
+  ensure_packages(['make','gcc','build-essential'], {'ensure' => 'present'})
 
   $builtin_checks = {}
   #$builtin_plugins = {}
@@ -38,7 +38,7 @@ class role_sensu::client(
 
   #$ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
   $ruby_run_comand = '/opt/sensu/embedded/bin'
-  
+
   role_sensu::keys::client { 'client_keys' :
     private => $client_key,
     cert    => $client_cert,
