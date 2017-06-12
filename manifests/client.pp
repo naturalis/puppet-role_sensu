@@ -17,6 +17,7 @@ class role_sensu::client(
   $reboot_warning     = true,
   $processes_to_check = [],
   $subscriptions      = ['appserver'],
+  $handler_definitions = {},
   $checks_defaults    = {
     interval      => 600,
     occurrences   => 3,
@@ -111,6 +112,7 @@ class role_sensu::client(
     standalone  => $checks_defaults['standalone'],
   }
 
+  create_resource( 'sensu::handlers' , $handler_definitions, {} )
   #create_resources('role_sensu::plugin_installer', unique(concat($plugins, $builtin_plugins)), [])
 
 }
