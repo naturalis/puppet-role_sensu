@@ -112,7 +112,7 @@ class role_sensu::client(
     standalone  => $checks_defaults['standalone'],
   }
 
-  create_resources( 'sensu::handlers' , $handler_definitions, {} )
+  create_resources( 'sensu::handler' , $handler_definitions, {} )
   #create_resources('role_sensu::plugin_installer', unique(concat($plugins, $builtin_plugins)), [])
 
 }
