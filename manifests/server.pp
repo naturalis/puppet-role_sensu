@@ -113,7 +113,6 @@ class role_sensu::server(
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
-    plugins                  =>  $plugin_array,
   } ->
 
 
@@ -126,7 +125,7 @@ class role_sensu::server(
 
 
   create_resources( 'sensu::handler' , $handler_definitions, {} )
-  #role_sensu::plugin_installer { $plugin_array : }
+  role_sensu::plugin_installer { $plugin_array : }
   
   role_sensu::keys::client { 'nginx_keys' :
     private         => $web_client_key,
