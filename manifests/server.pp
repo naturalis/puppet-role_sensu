@@ -75,7 +75,8 @@ class role_sensu::server(
     $sensu_api_endpoints = $uchiwa_api_config
   }
 
-
+  ensure_packages(['make','gcc','build-essential'], {'ensure' => 'present'})
+  
   role_sensu::keys::server { 'server_keys' :
     private => $server_key,
     cert    => $server_cert,
