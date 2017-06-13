@@ -50,6 +50,7 @@ class role_sensu::server(
   $sensu_password    = 'bladiebla',
   $subscriptions     = ['appserver'],
   $handler_definitions = {},
+  $plugin_array      = [],
   $uchiwa_dns_name   = 'sensu.naturalis.nl',
   $expose_api        = false,
   $extra_uchiwa_cons = [],
@@ -123,6 +124,7 @@ class role_sensu::server(
 
 
   create_resources( 'sensu::handler' , $handler_definitions, {} )
+  role_sensu::plugin_installer { $plugin_array : }
   
   role_sensu::keys::client { 'nginx_keys' :
     private         => $web_client_key,
