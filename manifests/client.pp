@@ -18,6 +18,7 @@ class role_sensu::client(
   $processes_to_check = [],
   $subscriptions      = ['appserver'],
   $handler_definitions = {},
+  $keep_alive_handlers = ['default'],
   $checks_defaults    = {
     interval      => 600,
     occurrences   => 3,
@@ -62,7 +63,7 @@ class role_sensu::client(
       'config'   => true
     },
     client_keepalive         => {
-      'handlers' => ['default']
+      'handlers' => $keep_alive_handlers
     }
   }
 
