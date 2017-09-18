@@ -55,7 +55,7 @@ class role_sensu::server(
   $expose_api        = false,
   $extra_uchiwa_cons = [],
 ){
-
+  include stdlib
 
   $uchiwa_api_config = [
     { name     => 'Naturalis Sensu',
