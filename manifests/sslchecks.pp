@@ -16,7 +16,8 @@ define role_sensu::sslchecks(
 
 # export check so sensu monitoring can make use of it
   @sensu::check { "Check_SSL ${title}" :
-    command => "/usr/local/sbin/chkssl_${title}.sh",
-    tag     => 'central_sensu',
+    interval  => '600',
+    command   => "/usr/local/sbin/chkssl_${title}.sh",
+    tag       => 'central_sensu',
 }
 }

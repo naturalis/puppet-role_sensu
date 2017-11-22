@@ -18,7 +18,8 @@ define role_sensu::ipmichecks(
 
 # export check so sensu monitoring can make use of it
   @sensu::check { "Check IPMI ${ip}_${title}" :
-    command => "/usr/local/sbin/chkipmi_${ip}_${title}.sh",
-    tag     => 'central_sensu',
+    interval  => '600',
+    command   => "/usr/local/sbin/chkipmi_${ip}_${title}.sh",
+    tag       => 'central_sensu',
 }
 }
