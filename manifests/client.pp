@@ -18,11 +18,12 @@ class role_sensu::client(
   $processes_to_check = [],
   $subscriptions      = ['appserver'],
   $handler_definitions = {},
+  $keep_alive_handlers = ['default'],
   $checks_defaults    = {
     interval      => 600,
     occurrences   => 3,
     refresh       => 60,
-    handlers      => [ 'default'],
+    handlers      => ['default'],
     subscribers   => ['appserver'],
     standalone    => true },
 
@@ -62,7 +63,7 @@ class role_sensu::client(
       'config'   => true
     },
     client_keepalive         => {
-      'handlers' => ['default']
+      'handlers' => $keep_alive_handlers
     }
   }
 
@@ -103,7 +104,7 @@ class role_sensu::client(
     defaults => $checks_defaults,
   }
 
-  Sensu::Check <| tag == 'central_sensu' |> {
+  Sensu::Check {
     interval    => $checks_defaults['interval'],
     occurrences => $checks_defaults['occurrrences'],
     refresh     => $checks_defaults['refresh'],
@@ -111,6 +112,8 @@ class role_sensu::client(
     subscribers => $checks_defaults['subscribers'],
     standalone  => $checks_defaults['standalone'],
   }
+
+  Sensu::Check <| tag == 'central_sensu' |>
 
   create_resources( 'sensu::handler' , $handler_definitions, {} )
   #create_resources('role_sensu::plugin_installer', unique(concat($plugins, $builtin_plugins)), [])

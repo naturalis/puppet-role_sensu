@@ -55,7 +55,7 @@ class role_sensu::server(
   $expose_api        = false,
   $extra_uchiwa_cons = [],
 ){
-
+  include stdlib
 
   $uchiwa_api_config = [
     { name     => 'Naturalis Sensu',
@@ -99,9 +99,9 @@ class role_sensu::server(
   class { 'sensu':
     server                   => true,
     #purge_config            => true,
-    install_repo             => false,
+    install_repo             => true,
     #fix for sensu always doing something
-    sensu_plugin_name        => 'ruby',
+#    sensu_plugin_name        => 'ruby',
     rabbitmq_password        => $rabbitmq_password,
     rabbitmq_ssl_private_key => '/etc/ssl/rabbitmq_client_key.pem',
     rabbitmq_ssl_cert_chain  => '/etc/ssl/rabbitmq_client_cert.pem',
@@ -113,7 +113,6 @@ class role_sensu::server(
     use_embedded_ruby        => true,
     rabbitmq_port            => 5671,
     rabbitmq_vhost           => '/sensu',
-    plugins                  =>  $plugin_array,
   } ->
 
 
@@ -126,7 +125,7 @@ class role_sensu::server(
 
 
   create_resources( 'sensu::handler' , $handler_definitions, {} )
-  #role_sensu::plugin_installer { $plugin_array : }
+  role_sensu::plugin_installer { $plugin_array : }
   
   role_sensu::keys::client { 'nginx_keys' :
     private         => $web_client_key,
@@ -141,7 +140,7 @@ class role_sensu::server(
     members => ['localhost:3000'],
   }
 
-  nginx::resource::vhost { $uchiwa_dns_name :
+  nginx::resource::server { $uchiwa_dns_name :
     proxy       => 'http://sensu_naturalis_nl',
     ssl         => true,
     listen_port => 443,
@@ -155,7 +154,7 @@ class role_sensu::server(
       members => ['localhost:4567'],
     }
 
-    nginx::resource::vhost { 'sensu api expose' :
+    nginx::resource::server { 'sensu api expose' :
       proxy       => 'http://sensuapi_naturalis_nl',
       ssl         => true,
       listen_port => 8443,
