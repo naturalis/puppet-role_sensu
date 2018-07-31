@@ -5,6 +5,7 @@ define role_sensu::sslchecks(
 #  $host             = $title
   $warning_days     = '30',
   $critical_days    = '15',
+  $port             = '443',
 )
 {
 
