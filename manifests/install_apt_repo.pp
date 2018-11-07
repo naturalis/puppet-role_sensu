@@ -3,8 +3,8 @@
 #
 class role_sensu::install_apt_repo {
 
-  $repo_key_id = '8911D8FF37778F24B4E726A218609E3D7580C77F'
-  $repo_key_source = 'http://repos.sensuapp.org/apt/pubkey.gpg'
+  $repo_key_id = 'EE15CFF6AB6E4E290FDAB681A20F259AEB9C94BB'
+  $repo_key_source = 'https://sensu.global.ssl.fastly.net/apt/pubkey.gpg'
 
   if defined(apt::source) {
 
@@ -14,7 +14,7 @@ class role_sensu::install_apt_repo {
     # }
 
 
-    $url = 'http://repos.sensuapp.org/apt'
+    $url = 'https://sensu.global.ssl.fastly.net/apt'
 
     apt::source { 'sensu_repo':
       ensure   => present,
