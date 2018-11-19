@@ -75,7 +75,7 @@ class role_sensu::client(
 
   if $check_disk {
     sensu::check { 'check_disk_usage':
-      command     => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical}"
+      command     => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical} -x tmpfs,overlay,nsfs"
     }
     sensu::check { 'check_disk_mounts':
       command     => "${ruby_run_comand} check-fstab-mounts.rb"
