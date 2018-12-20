@@ -138,8 +138,8 @@ class role_sensu::server(
     proxy       => 'http://sensu_naturalis_nl',
     ssl         => true,
     listen_port => 443,
-    ssl_cert    => '/etc/ssl/web_client_cert.pem',
-    ssl_key     => '/etc/ssl/web_client_key.pem',
+    ssl_cert    => '/etc/letsencrypt/live/sensu.naturalis.nl/fullchain.pem',
+    ssl_key     => '/etc/letsencrypt/live/sensu.naturalis.nl/privkey.pem',
   }
 
   if (expose_api) {
@@ -153,8 +153,8 @@ class role_sensu::server(
       ssl         => true,
       listen_port => 8443,
       ssl_port    => 8443,
-      ssl_cert    => '/etc/ssl/web_client_cert.pem',
-      ssl_key     => '/etc/ssl/web_client_key.pem',
+      ssl_cert    => '/etc/letsencrypt/live/sensu.naturalis.nl/fullchain.pem',
+      ssl_key     => '/etc/letsencrypt/live/sensu.naturalis.nl/privkey.pem',
     }
   }
 
