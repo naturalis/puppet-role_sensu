@@ -14,6 +14,9 @@ class role_sensu::client(
   $check_load         = true,
   $load_warning       = '0.99,0.95,0.9',
   $load_critical      = '0.99,0.99,0.95',
+  $check_memory       = true,
+  $memory_pct_warning = '80',
+  $memory_pct_critical= '90',
   $reboot_warning     = true,
   $processes_to_check = [],
   $subscriptions      = ['appserver'],
@@ -27,7 +30,7 @@ class role_sensu::client(
 
 ){
 
-  $builtin_plugins = ['sensu-plugins-disk-checks', 'sensu-plugins-load-checks', 'sensu-plugins-process-checks' ]
+  $builtin_plugins = ['sensu-plugins-disk-checks', 'sensu-plugins-load-checks', 'sensu-plugins-process-checks', 'sensu-plugins-memory-checks']
   $ruby_run_comand = '/opt/sensu/embedded/bin/ruby -C/opt/sensu/embedded/bin'
 
   role_sensu::keys::client { 'client_keys' :
@@ -85,6 +88,12 @@ class role_sensu::client(
   if $check_load {
     sensu::check { 'check_CPU_load':
       command     => "${ruby_run_comand} check-load.rb -w ${load_warning} -c ${load_critical}"
+    }
+  }
+
+  if $check_memory {
+    sensu::check { 'check_memory':
+      command     => "${ruby_run_comand} check-memory-percent.rb -w ${memory_pct_warning} -c ${memory_pct_critical}"
     }
   }
 
