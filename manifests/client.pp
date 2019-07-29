@@ -78,7 +78,7 @@ class role_sensu::client(
 
   if $check_disk {
     sensu::check { 'check_disk_usage':
-      command     => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical} -x tmpfs,overlay,nsfs"
+      command     => "${ruby_run_comand} check-disk-usage.rb -w ${disk_warning} -c ${disk_critical} -x tmpfs,overlay,nsfs -p '(/var|/run|/sys|/snap)'"
     }
     sensu::check { 'check_disk_mounts':
       command     => "${ruby_run_comand} check-fstab-mounts.rb"
@@ -97,10 +97,19 @@ class role_sensu::client(
     }
   }
 
+  create_resources( 'sensu::check', $checks, $checks_defaults )
+
   if size($processes_to_check) > 0 {
     role_sensu::check_process_installer { $processes_to_check :
       checks_defaults => $checks_defaults,
     }
+  }
+
+  # change cert.pem in symlink to ca-certificates.crt for more recent bundle of root certificates. 
+  file { '/opt/sensu/embedded/ssl/cert.pem':
+    ensure      => link,
+    force       => true,
+    target      => '/etc/ssl/certs/ca-certificates.crt',
   }
 
   $plugin_array = unique(concat($plugins, $builtin_plugins))
